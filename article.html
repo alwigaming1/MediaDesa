@@ -9,462 +9,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/article.css">
-    <style>
-        /* PERBAIKAN: Layout dengan sidebar untuk desktop */
-        .article-content {
-            background: #ffffff;
-        }
-        
-        .article-layout {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 3rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        
-        .article-main {
-            background: #ffffff;
-            padding: 0;
-            width: 100%;
-        }
-        
-        .article-sidebar {
-            background: #f7fafc;
-            border-radius: 12px;
-            padding: 2rem;
-            height: fit-content;
-            position: sticky;
-            top: 100px;
-        }
-        
-        .article-header {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding: 0;
-        }
-        
-        .article-category {
-            display: inline-block;
-            padding: 0.5rem 1.5rem;
-            background: linear-gradient(135deg, #1a365d, #2d4a80);
-            color: white;
-            font-size: 0.875rem;
-            font-weight: 600;
-            border-radius: 25px;
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .article-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.25rem;
-            line-height: 1.3;
-            margin-bottom: 1.5rem;
-            color: #1a202c;
-            font-weight: 700;
-            max-width: 100%;
-        }
-        
-        .article-meta {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 2rem;
-            color: #718096;
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-        
-        .article-meta span {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .article-image {
-            width: 100%;
-            height: 400px;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            background-size: cover;
-            background-position: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        
-        .article-body {
-            font-size: 1.125rem;
-            line-height: 1.8;
-            color: #2d3748;
-            max-width: 100%;
-        }
-        
-        .article-body p {
-            margin-bottom: 1.5rem;
-            text-align: justify;
-        }
-        
-        .article-body h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.75rem;
-            margin: 2.5rem 0 1.5rem;
-            color: #1a202c;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #d4af37;
-        }
-        
-        .article-body h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            margin: 2rem 0 1rem;
-            color: #1a202c;
-        }
-        
-        .article-body strong {
-            color: #1a202c;
-            font-weight: 600;
-        }
-        
-        .article-body em {
-            color: #4a5568;
-            font-style: italic;
-        }
-        
-        .article-body blockquote {
-            border-left: 4px solid #d4af37;
-            padding: 1.5rem 2rem;
-            margin: 2rem 0;
-            background: #f7fafc;
-            font-style: italic;
-            color: #4a5568;
-            border-radius: 0 8px 8px 0;
-        }
-        
-        .article-body ul, .article-body ol {
-            margin: 1.5rem 0;
-            padding-left: 2rem;
-        }
-        
-        .article-body li {
-            margin-bottom: 0.75rem;
-            line-height: 1.6;
-        }
-        
-        .article-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin: 3rem 0 2rem;
-            padding: 2rem 0;
-            border-top: 1px solid #e2e8f0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .tag {
-            display: inline-block;
-            padding: 0.5rem 1.25rem;
-            background: #edf2f7;
-            color: #4a5568;
-            border-radius: 20px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-        
-        .tag:hover {
-            background: #1a365d;
-            color: white;
-            transform: translateY(-2px);
-        }
-        
-        .article-share {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin: 2rem 0;
-            padding: 2rem;
-            background: #f7fafc;
-            border-radius: 12px;
-        }
-        
-        .share-label {
-            font-weight: 600;
-            color: #2d3748;
-            font-size: 1.1rem;
-        }
-        
-        .share-buttons {
-            display: flex;
-            gap: 0.75rem;
-        }
-        
-        .share-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 45px;
-            height: 45px;
-            background: white;
-            border: 2px solid #e2e8f0;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            color: #4a5568;
-            text-decoration: none;
-        }
-        
-        .share-btn:hover {
-            background: #1a365d;
-            color: white;
-            border-color: #1a365d;
-            transform: translateY(-2px);
-        }
-        
-        .article-author {
-            display: flex;
-            gap: 1.5rem;
-            padding: 2.5rem;
-            background: linear-gradient(135deg, #f7fafc, #edf2f7);
-            border-radius: 12px;
-            margin: 3rem 0;
-            align-items: center;
-        }
-        
-        .author-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: #e2e8f0;
-            flex-shrink: 0;
-            background-size: cover;
-            background-position: center;
-            border: 4px solid white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        
-        .author-info h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: #1a202c;
-        }
-        
-        .author-bio {
-            color: #718096;
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-        
-        .related-news {
-            background: #f7fafc;
-            padding: 4rem 0;
-        }
-
-        /* STYLING SIDEBAR */
-        .sidebar-widget {
-            margin-bottom: 2.5rem;
-        }
-        
-        .sidebar-widget:last-child {
-            margin-bottom: 0;
-        }
-        
-        .widget-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.25rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 2px solid #d4af37;
-            color: #1a202c;
-        }
-        
-        .popular-sidebar-item {
-            display: flex;
-            gap: 1rem;
-            padding: 1rem 0;
-            border-bottom: 1px solid #e2e8f0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .popular-sidebar-item:hover {
-            background: #edf2f7;
-            padding-left: 0.5rem;
-            border-radius: 6px;
-        }
-        
-        .popular-sidebar-item:last-child {
-            border-bottom: none;
-        }
-        
-        .popular-sidebar-image {
-            width: 80px;
-            height: 60px;
-            border-radius: 6px;
-            background-size: cover;
-            background-position: center;
-            flex-shrink: 0;
-        }
-        
-        .popular-sidebar-content {
-            flex: 1;
-        }
-        
-        .popular-sidebar-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            line-height: 1.4;
-            margin-bottom: 0.25rem;
-            color: #2d3748;
-        }
-        
-        .popular-sidebar-meta {
-            font-size: 0.75rem;
-            color: #718096;
-        }
-        
-        .categories-sidebar-list {
-            list-style: none;
-        }
-        
-        .categories-sidebar-item {
-            margin-bottom: 0.75rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .categories-sidebar-item:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-        
-        .categories-sidebar-link {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #4a5568;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            padding: 0.5rem;
-            border-radius: 6px;
-        }
-        
-        .categories-sidebar-link:hover {
-            background: #edf2f7;
-            color: #1a365d;
-            padding-left: 1rem;
-        }
-        
-        .category-sidebar-count {
-            background: #1a365d;
-            color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        /* PERBAIKAN: Container related news */
-        .related-news .container {
-            max-width: 1200px;
-        }
-
-        /* Mobile Sidebar - akan muncul di bawah konten */
-        .mobile-sidebar {
-            display: none;
-            background: #f7fafc;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-top: 2rem;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .article-layout {
-                grid-template-columns: 1fr;
-                gap: 0;
-                padding: 0 1rem;
-            }
-            
-            .article-sidebar {
-                display: none; /* Sembunyikan sidebar di mobile */
-            }
-            
-            .mobile-sidebar {
-                display: block; /* Tampilkan mobile sidebar */
-            }
-            
-            .article-title {
-                font-size: 1.75rem;
-                line-height: 1.3;
-            }
-            
-            .article-meta {
-                flex-direction: column;
-                gap: 0.75rem;
-                text-align: center;
-            }
-            
-            .article-image {
-                height: 250px;
-            }
-            
-            .article-body {
-                font-size: 1rem;
-                line-height: 1.7;
-            }
-            
-            .article-author {
-                flex-direction: column;
-                text-align: center;
-                padding: 2rem;
-            }
-            
-            .author-avatar {
-                width: 80px;
-                height: 80px;
-            }
-            
-            .share-buttons {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .article-share {
-                flex-direction: column;
-                text-align: center;
-                gap: 1rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .article-title {
-                font-size: 1.5rem;
-            }
-            
-            .article-image {
-                height: 200px;
-            }
-        }
-
-        /* PERBAIKAN: Untuk layar sangat besar */
-        @media (min-width: 1400px) {
-            .article-layout {
-                max-width: 1300px;
-            }
-        }
-    </style>
 </head>
 <body>
     <!-- Header -->
     <div class="header-top">
         <div class="container header-top-container">
             <div class="header-top-left">
-                <span><i class="fas fa-map-marker-alt"></i> Desa Sukamaju, Kec. Sukajaya</span>
+                <span><i class="fas fa-map-marker-alt"></i> Desa Sopa, Kec. Kindang</span>
                 <span><i class="fas fa-clock"></i> Senin - Jumat: 08:00 - 16:00</span>
             </div>
             <div class="header-top-right">
@@ -510,7 +61,10 @@
             <!-- Konten Artikel Utama -->
             <div class="article-main">
                 <div class="article-header">
-                    <span class="article-category" id="articleCategory">Berita</span>
+                    <!-- Tombol Kembali dihilangkan -->
+                    <div class="article-category-wrapper">
+                        <span class="article-category" id="articleCategory">DesaMedia / Berita</span>
+                    </div>
                     <h1 class="article-title" id="articleTitle">Judul Artikel akan Ditampilkan di Sini</h1>
                     <div class="article-meta" id="articleMeta">
                         <span><i class="far fa-user"></i> <span id="metaAuthor">Penulis</span></span>
@@ -567,14 +121,63 @@
                 <div class="sidebar-widget">
                     <h3 class="widget-title">Berita Populer</h3>
                     <div class="popular-sidebar-list" id="sidebarPopularNews">
-                        <!-- Berita populer akan diisi oleh JavaScript -->
+                        <div class="popular-sidebar-item">
+                            <div class="popular-sidebar-image" style="background-image: url('https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80')"></div>
+                            <div class="popular-sidebar-content">
+                                <h4 class="popular-sidebar-title">Pembangunan Jembatan Desa Selesai Tepat Waktu</h4>
+                                <div class="popular-sidebar-meta">250 dilihat • 2 hari lalu</div>
+                            </div>
+                        </div>
+                        <div class="popular-sidebar-item">
+                            <div class="popular-sidebar-image" style="background-image: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80')"></div>
+                            <div class="popular-sidebar-content">
+                                <h4 class="popular-sidebar-title">Festival Budaya Desa Sopa Sukses Digelar</h4>
+                                <div class="popular-sidebar-meta">180 dilihat • 3 hari lalu</div>
+                            </div>
+                        </div>
+                        <div class="popular-sidebar-item">
+                            <div class="popular-sidebar-image" style="background-image: url('https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80')"></div>
+                            <div class="popular-sidebar-content">
+                                <h4 class="popular-sidebar-title">Program Bantuan UMKM untuk Warga Desa</h4>
+                                <div class="popular-sidebar-meta">150 dilihat • 5 hari lalu</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="sidebar-widget">
                     <h3 class="widget-title">Kategori</h3>
                     <ul class="categories-sidebar-list" id="sidebarCategories">
-                        <!-- Kategori akan diisi oleh JavaScript -->
+                        <li class="categories-sidebar-item">
+                            <a href="#" class="categories-sidebar-link" onclick="filterByCategory('Pemerintahan')">
+                                Pemerintahan
+                                <span class="category-sidebar-count">12</span>
+                            </a>
+                        </li>
+                        <li class="categories-sidebar-item">
+                            <a href="#" class="categories-sidebar-link" onclick="filterByCategory('Pembangunan')">
+                                Pembangunan
+                                <span class="category-sidebar-count">8</span>
+                            </a>
+                        </li>
+                        <li class="categories-sidebar-item">
+                            <a href="#" class="categories-sidebar-link" onclick="filterByCategory('Ekonomi')">
+                                Ekonomi
+                                <span class="category-sidebar-count">15</span>
+                            </a>
+                        </li>
+                        <li class="categories-sidebar-item">
+                            <a href="#" class="categories-sidebar-link" onclick="filterByCategory('Pendidikan')">
+                                Pendidikan
+                                <span class="category-sidebar-count">10</span>
+                            </a>
+                        </li>
+                        <li class="categories-sidebar-item">
+                            <a href="#" class="categories-sidebar-link" onclick="filterByCategory('Kesehatan')">
+                                Kesehatan
+                                <span class="category-sidebar-count">7</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </aside>
@@ -657,168 +260,205 @@
             </div>
         </div>
     </footer>
-    <!-- Tambahkan sebelum script lainnya -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
-<script src="js/firebase-config.js"></script>
 
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
     <script src="js/utils.js"></script>
-<script src="js/article.js"></script>
+    <script src="js/article.js"></script>
     
-<script>
-// Enhanced article display dengan Firebase
-document.addEventListener('DOMContentLoaded', async function() {
-    console.log('Loading article with Firebase...');
-    
-    const articleId = localStorage.getItem('currentArticle');
-    
-    if (articleId) {
+    <script>
+    // Initialize mobile sidebar
+    function initializeMobileSidebar() {
+        const desktopPopular = document.getElementById('sidebarPopularNews');
+        const mobilePopular = document.getElementById('mobilePopularNews');
+        const desktopCategories = document.getElementById('sidebarCategories');
+        const mobileCategories = document.getElementById('mobileCategories');
+        
+        if (desktopPopular && mobilePopular) {
+            mobilePopular.innerHTML = desktopPopular.innerHTML;
+        }
+        
+        if (desktopCategories && mobileCategories) {
+            mobileCategories.innerHTML = desktopCategories.innerHTML;
+        }
+    }
+
+    // Enhanced article display dengan Firebase
+    document.addEventListener('DOMContentLoaded', async function() {
+        console.log('Loading article with Firebase...');
+        
+        const articleId = localStorage.getItem('currentArticle');
+        
+        if (articleId) {
+            try {
+                // Load article data first
+                const doc = await db.collection('articles').doc(articleId).get();
+                
+                if (doc.exists) {
+                    const article = {
+                        id: doc.id,
+                        ...doc.data(),
+                        createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || new Date().toISOString()
+                    };
+                    
+                    // Then increment views
+                    await incrementArticleViews(articleId);
+                    
+                    // Display the article
+                    displayArticleSulengkaStyle(article);
+                    loadRelatedArticles(article);
+                    loadSidebarContent();
+                    setupShareButtons(article);
+                    
+                } else {
+                    showArticleNotFound();
+                }
+            } catch (error) {
+                console.error('Error loading article:', error);
+                showArticleNotFound();
+            }
+        } else {
+            showArticleNotFound();
+        }
+        
+        setupEventListeners();
+        initializeMobileSidebar();
+    });
+
+    async function incrementArticleViews(articleId) {
         try {
-            // Increment view count
             await db.collection('articles').doc(articleId).update({
                 views: firebase.firestore.FieldValue.increment(1),
                 lastViewed: firebase.firestore.FieldValue.serverTimestamp()
             });
-
-            // Load article data
-            const doc = await db.collection('articles').doc(articleId).get();
-            
-            if (doc.exists) {
-                const article = {
-                    id: doc.id,
-                    ...doc.data(),
-                    createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || new Date().toISOString()
-                };
-                
-                displayArticleSulengkaStyle(article);
-                loadRelatedArticles(article);
-                loadSidebarContent();
-                setupShareButtons(article);
-                
-            } else {
-                showArticleNotFound();
-            }
         } catch (error) {
-            console.error('Error loading article:', error);
-            showArticleNotFound();
+            console.error('Error incrementing views:', error);
         }
-    } else {
-        showArticleNotFound();
     }
-    
-    setupEventListeners();
-});
 
-function displayArticleSulengkaStyle(article) {
-    console.log('Displaying article in sulengka.id style:', article.title);
-    
-    // Update document title
-    document.title = `${article.title} - DesaMedia`;
-    
-    // Update article content
-    document.getElementById('articleCategory').textContent = article.category;
-    document.getElementById('articleTitle').textContent = article.title;
-    
-    // Update meta information
-    document.getElementById('metaAuthor').textContent = article.author;
-    document.getElementById('metaDate').textContent = formatDateSulengka(article.createdAt);
-    document.getElementById('metaViews').textContent = article.views || 0;
-    document.getElementById('metaReadTime').textContent = article.readTime || calculateReadTime(article.content);
-    
-    // Update article image
-    const articleImage = document.getElementById('articleImage');
-    if (article.image) {
-        articleImage.style.backgroundImage = `url('${article.image}')`;
-    } else {
-        articleImage.style.backgroundImage = `url('https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')`;
-    }
-    
-    // Update article content with enhanced formatting
-    document.getElementById('articleBody').innerHTML = formatContentSulengka(article.content);
-    
-    // Update tags
-    updateTagsSulengka(article.tags);
-    
-    // Update author information
-    updateAuthorSulengka(article.author);
-}
-
-function formatDateSulengka(dateString) {
-    try {
-        const date = new Date(dateString);
-        const options = { 
-            weekday: 'long',
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        };
-        return date.toLocaleDateString('id-ID', options);
-    } catch (e) {
-        return 'Tanggal tidak tersedia';
-    }
-}
-
-function formatContentSulengka(content) {
-    if (!content) return '<p>Konten tidak tersedia.</p>';
-    
-    // Jika content sudah berupa HTML, langsung return
-    if (content.includes('<')) {
-        return content;
-    }
-    
-    // Split content into paragraphs and format
-    const paragraphs = content.split('\n\n');
-    let formattedContent = '';
-    
-    paragraphs.forEach(paragraph => {
-        if (paragraph.trim()) {
-            // Check if paragraph is a heading (short and doesn't end with period)
-            if (paragraph.length < 100 && !paragraph.includes('.') && paragraph.trim().length > 10) {
-                formattedContent += `<h2>${paragraph.trim()}</h2>`;
-            } else {
-                formattedContent += `<p>${paragraph.trim()}</p>`;
-            }
-        }
-    });
-    
-    return formattedContent;
-}
-
-function updateTagsSulengka(tags) {
-    const tagsContainer = document.getElementById('articleTags');
-    if (tags && tags.length > 0) {
-        tagsContainer.innerHTML = tags.map(tag => 
-            `<a href="#" class="tag" onclick="searchByTag('${tag}')">#${tag}</a>`
-        ).join('');
-    } else {
-        tagsContainer.innerHTML = '<a href="#" class="tag">#BeritaDesa</a>';
-    }
-}
-
-async function updateAuthorSulengka(authorName) {
-    try {
-        // Cari user berdasarkan username
-        const snapshot = await db.collection('users').where('username', '==', authorName).get();
-        let authorProfile = {};
+    function displayArticleSulengkaStyle(article) {
+        console.log('Displaying article:', article.title);
         
-        if (!snapshot.empty) {
-            snapshot.forEach(doc => {
-                authorProfile = doc.data();
-            });
-        }
+        // Update document title
+        document.title = `${article.title} - DesaMedia`;
         
-        const authorAvatar = document.getElementById('authorAvatar');
-        const authorNameElement = document.getElementById('authorName');
-        const authorBioElement = document.getElementById('authorBio');
+        // Update article content dengan format baru
+        document.getElementById('articleCategory').textContent = `DesaMedia / ${article.category}`;
+        document.getElementById('articleTitle').textContent = article.title;
         
-        // Update avatar
-        if (authorProfile.photo) {
-            authorAvatar.style.backgroundImage = `url('${authorProfile.photo}')`;
+        // Update meta information
+        document.getElementById('metaAuthor').textContent = article.author;
+        document.getElementById('metaDate').textContent = formatDateSulengka(article.createdAt);
+        document.getElementById('metaViews').textContent = article.views || 0;
+        document.getElementById('metaReadTime').textContent = article.readTime || calculateReadTime(article.content);
+        
+        // Update article image
+        const articleImage = document.getElementById('articleImage');
+        if (article.image) {
+            articleImage.style.backgroundImage = `url('${article.image}')`;
         } else {
+            articleImage.style.backgroundImage = `url('https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')`;
+        }
+        
+        // Update article content with enhanced formatting
+        document.getElementById('articleBody').innerHTML = formatContentSulengka(article.content);
+        
+        // Update tags
+        updateTagsSulengka(article.tags);
+        
+        // Update author information
+        updateAuthorSulengka(article.author);
+    }
+
+    function formatDateSulengka(dateString) {
+        try {
+            const date = new Date(dateString);
+            const options = { 
+                weekday: 'long',
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric'
+            };
+            return date.toLocaleDateString('id-ID', options);
+        } catch (e) {
+            return 'Tanggal tidak tersedia';
+        }
+    }
+
+    function formatContentSulengka(content) {
+        if (!content) return '<p>Konten tidak tersedia.</p>';
+        
+        if (content.includes('<')) {
+            return content;
+        }
+        
+        const paragraphs = content.split('\n\n');
+        let formattedContent = '';
+        
+        paragraphs.forEach(paragraph => {
+            if (paragraph.trim()) {
+                if (paragraph.length < 100 && !paragraph.includes('.') && paragraph.trim().length > 10) {
+                    formattedContent += `<h2>${paragraph.trim()}</h2>`;
+                } else {
+                    formattedContent += `<p>${paragraph.trim()}</p>`;
+                }
+            }
+        });
+        
+        return formattedContent;
+    }
+
+    function updateTagsSulengka(tags) {
+        const tagsContainer = document.getElementById('articleTags');
+        if (tags && tags.length > 0) {
+            tagsContainer.innerHTML = tags.map(tag => 
+                `<a href="#" class="tag" onclick="searchByTag('${tag}')">#${tag}</a>`
+            ).join('');
+        } else {
+            tagsContainer.innerHTML = '<a href="#" class="tag">#BeritaDesa</a>';
+        }
+    }
+
+    async function updateAuthorSulengka(authorName) {
+        try {
+            const snapshot = await db.collection('users').where('username', '==', authorName).get();
+            let authorProfile = {};
+            
+            if (!snapshot.empty) {
+                snapshot.forEach(doc => {
+                    authorProfile = doc.data();
+                });
+            }
+            
+            const authorAvatar = document.getElementById('authorAvatar');
+            const authorNameElement = document.getElementById('authorName');
+            const authorBioElement = document.getElementById('authorBio');
+            
+            if (authorProfile.photo) {
+                authorAvatar.style.backgroundImage = `url('${authorProfile.photo}')`;
+            } else {
+                authorAvatar.style.backgroundColor = '#1a365d';
+                authorAvatar.style.display = 'flex';
+                authorAvatar.style.alignItems = 'center';
+                authorAvatar.style.justifyContent = 'center';
+                authorAvatar.style.color = 'white';
+                authorAvatar.style.fontSize = '1.5rem';
+                authorAvatar.style.fontWeight = 'bold';
+                authorAvatar.textContent = authorName.charAt(0).toUpperCase();
+            }
+            
+            authorNameElement.textContent = authorProfile.name || authorName;
+            authorBioElement.textContent = authorProfile.bio || 'Penulis aktif di DesaMedia yang berdedikasi menyampaikan informasi terpercaya untuk masyarakat desa.';
+        } catch (error) {
+            console.error('Error loading author profile:', error);
+            const authorAvatar = document.getElementById('authorAvatar');
+            const authorNameElement = document.getElementById('authorName');
+            const authorBioElement = document.getElementById('authorBio');
+            
             authorAvatar.style.backgroundColor = '#1a365d';
             authorAvatar.style.display = 'flex';
             authorAvatar.style.alignItems = 'center';
@@ -827,327 +467,293 @@ async function updateAuthorSulengka(authorName) {
             authorAvatar.style.fontSize = '1.5rem';
             authorAvatar.style.fontWeight = 'bold';
             authorAvatar.textContent = authorName.charAt(0).toUpperCase();
-        }
-        
-        // Update name and bio
-        authorNameElement.textContent = authorProfile.name || authorName;
-        authorBioElement.textContent = authorProfile.bio || 'Penulis aktif di DesaMedia yang berdedikasi menyampaikan informasi terpercaya untuk masyarakat desa.';
-    } catch (error) {
-        console.error('Error loading author profile:', error);
-        // Fallback
-        const authorAvatar = document.getElementById('authorAvatar');
-        const authorNameElement = document.getElementById('authorName');
-        const authorBioElement = document.getElementById('authorBio');
-        
-        authorAvatar.style.backgroundColor = '#1a365d';
-        authorAvatar.style.display = 'flex';
-        authorAvatar.style.alignItems = 'center';
-        authorAvatar.style.justifyContent = 'center';
-        authorAvatar.style.color = 'white';
-        authorAvatar.style.fontSize = '1.5rem';
-        authorAvatar.style.fontWeight = 'bold';
-        authorAvatar.textContent = authorName.charAt(0).toUpperCase();
-        
-        authorNameElement.textContent = authorName;
-        authorBioElement.textContent = 'Penulis aktif di DesaMedia yang berdedikasi menyampaikan informasi terpercaya untuk masyarakat desa.';
-    }
-}
-
-function calculateReadTime(content) {
-    const wordsPerMinute = 200;
-    const words = content.split(/\s+/).length;
-    return Math.max(1, Math.ceil(words / wordsPerMinute));
-}
-
-async function loadRelatedArticles(currentArticle) {
-    try {
-        const snapshot = await db.collection('articles')
-            .where('status', '==', 'published')
-            .where('category', '==', currentArticle.category)
-            .where(firebase.firestore.FieldPath.documentId(), '!=', currentArticle.id)
-            .limit(3)
-            .get();
             
-        const relatedArticles = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-            createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || new Date().toISOString()
-        }));
-        
-        if (relatedArticles.length === 0) {
-            // Fallback to any recent articles
-            const recentSnapshot = await db.collection('articles')
+            authorNameElement.textContent = authorName;
+            authorBioElement.textContent = 'Penulis aktif di DesaMedia yang berdedikasi menyampaikan informasi terpercaya untuk masyarakat desa.';
+        }
+    }
+
+    function calculateReadTime(content) {
+        const wordsPerMinute = 200;
+        const words = content.split(/\s+/).length;
+        return Math.max(1, Math.ceil(words / wordsPerMinute));
+    }
+
+    async function loadRelatedArticles(currentArticle) {
+        try {
+            const snapshot = await db.collection('articles')
                 .where('status', '==', 'published')
+                .where('category', '==', currentArticle.category)
                 .where(firebase.firestore.FieldPath.documentId(), '!=', currentArticle.id)
-                .orderBy('createdAt', 'desc')
                 .limit(3)
                 .get();
                 
-            const recentArticles = recentSnapshot.docs.map(doc => ({
+            const relatedArticles = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data(),
                 createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || new Date().toISOString()
             }));
             
-            displayRelatedArticles(recentArticles, document.getElementById('relatedNews'));
-        } else {
-            displayRelatedArticles(relatedArticles, document.getElementById('relatedNews'));
-        }
-    } catch (error) {
-        console.error('Error loading related articles:', error);
-        // Fallback: tampilkan pesan tidak ada artikel terkait
-        document.getElementById('relatedNews').innerHTML = `
-            <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
-                <p style="color: #718096;">Belum ada berita terkait</p>
-            </div>
-        `;
-    }
-}
-
-function displayRelatedArticles(articles, container) {
-    if (!container) return;
-    
-    if (articles.length === 0) {
-        container.innerHTML = `
-            <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
-                <p style="color: #718096;">Belum ada berita terkait</p>
-            </div>
-        `;
-        return;
-    }
-    
-    container.innerHTML = articles.map(article => `
-        <article class="news-card" onclick="viewRelatedArticle('${article.id}')">
-            <div class="news-image" style="background-image: url('${article.image}')"></div>
-            <div class="news-content">
-                <span class="news-category">${article.category}</span>
-                <h3 class="news-title">${article.title}</h3>
-                <p class="news-excerpt">${article.excerpt || article.content.substring(0, 100)}...</p>
-                <div class="news-meta">
-                    <span>${formatDateSulengka(article.createdAt)}</span>
-                    <span>Oleh: ${article.author}</span>
-                </div>
-            </div>
-        </article>
-    `).join('');
-}
-
-async function loadSidebarContent() {
-    try {
-        // Load popular news in sidebar (desktop dan mobile)
-        await loadSidebarPopularNews();
-        
-        // Load categories in sidebar (desktop dan mobile)
-        await loadSidebarCategories();
-    } catch (error) {
-        console.error('Error loading sidebar content:', error);
-    }
-}
-
-async function loadSidebarPopularNews() {
-    try {
-        const snapshot = await db.collection('articles')
-            .where('status', '==', 'published')
-            .orderBy('views', 'desc')
-            .limit(5)
-            .get();
-
-        const popularArticles = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-            createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || new Date().toISOString()
-        }));
-
-        // Update desktop sidebar
-        const desktopContainer = document.getElementById('sidebarPopularNews');
-        const mobileContainer = document.getElementById('mobilePopularNews');
-        
-        if (popularArticles.length === 0) {
-            const emptyMessage = `
-                <div style="text-align: center; padding: 1rem; color: #718096;">
-                    <p>Belum ada artikel populer</p>
+            if (relatedArticles.length === 0) {
+                const recentSnapshot = await db.collection('articles')
+                    .where('status', '==', 'published')
+                    .where(firebase.firestore.FieldPath.documentId(), '!=', currentArticle.id)
+                    .orderBy('createdAt', 'desc')
+                    .limit(3)
+                    .get();
+                    
+                const recentArticles = recentSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data(),
+                    createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || new Date().toISOString()
+                }));
+                
+                displayRelatedArticles(recentArticles, document.getElementById('relatedNews'));
+            } else {
+                displayRelatedArticles(relatedArticles, document.getElementById('relatedNews'));
+            }
+        } catch (error) {
+            console.error('Error loading related articles:', error);
+            document.getElementById('relatedNews').innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+                    <p style="color: #718096;">Belum ada berita terkait</p>
                 </div>
             `;
-            if (desktopContainer) desktopContainer.innerHTML = emptyMessage;
-            if (mobileContainer) mobileContainer.innerHTML = emptyMessage;
+        }
+    }
+
+    function displayRelatedArticles(articles, container) {
+        if (!container) return;
+        
+        if (articles.length === 0) {
+            container.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+                    <p style="color: #718096;">Belum ada berita terkait</p>
+                </div>
+            `;
             return;
         }
         
-        const popularHTML = popularArticles.map(article => `
-            <div class="popular-sidebar-item" onclick="viewRelatedArticle('${article.id}')">
-                <div class="popular-sidebar-image" style="background-image: url('${article.image}')"></div>
-                <div class="popular-sidebar-content">
-                    <h4 class="popular-sidebar-title">${article.title}</h4>
-                    <div class="popular-sidebar-meta">
-                        ${article.views || 0} dilihat • ${formatRelativeTime(article.createdAt)}
+        container.innerHTML = articles.map(article => `
+            <article class="news-card" onclick="viewRelatedArticle('${article.id}')">
+                <div class="news-image" style="background-image: url('${article.image}')"></div>
+                <div class="news-content">
+                    <span class="news-category">${article.category}</span>
+                    <h3 class="news-title">${article.title}</h3>
+                    <p class="news-excerpt">${article.excerpt || article.content.substring(0, 100)}...</p>
+                    <div class="news-meta">
+                        <span>${formatDateSulengka(article.createdAt)}</span>
+                        <span>Oleh: ${article.author}</span>
                     </div>
                 </div>
-            </div>
+            </article>
         `).join('');
-        
-        if (desktopContainer) desktopContainer.innerHTML = popularHTML;
-        if (mobileContainer) mobileContainer.innerHTML = popularHTML;
-    } catch (error) {
-        console.error('Error loading popular news:', error);
     }
-}
 
-async function loadSidebarCategories() {
-    try {
-        let categoriesData = [];
+    async function loadSidebarContent() {
         try {
-            const snapshot = await db.collection('categories').where('isActive', '==', true).orderBy('order').get();
-            categoriesData = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
+            await loadSidebarPopularNews();
+            await loadSidebarCategories();
+            initializeMobileSidebar();
         } catch (error) {
-            // Fallback to default categories
-            categoriesData = ['Pemerintahan', 'Pertanian', 'Kesehatan', 'Pendidikan', 'Ekonomi', 'Keamanan', 'Pembangunan', 'Lingkungan', 'Sosial']
-                .map(name => ({ id: name, name }));
+            console.error('Error loading sidebar content:', error);
         }
+    }
 
-        const desktopContainer = document.getElementById('sidebarCategories');
-        const mobileContainer = document.getElementById('mobileCategories');
-        
-        // Get article counts for each category
-        const categoriesWithCounts = await Promise.all(
-            categoriesData.map(async (category) => {
-                const snapshot = await db.collection('articles')
-                    .where('status', '==', 'published')
-                    .where('category', '==', category.name)
-                    .get();
-                return {
-                    ...category,
-                    count: snapshot.size
-                };
-            })
-        );
-        
-        const categoriesHTML = categoriesWithCounts.map(category => {
-            return `
-                <li class="categories-sidebar-item">
-                    <a href="#" class="categories-sidebar-link" onclick="filterByCategory('${category.name}')">
-                        ${category.name}
-                        <span class="category-sidebar-count">${category.count}</span>
-                    </a>
-                </li>
-            `;
-        }).join('');
-        
-        if (desktopContainer) desktopContainer.innerHTML = categoriesHTML;
-        if (mobileContainer) mobileContainer.innerHTML = categoriesHTML;
-    } catch (error) {
-        console.error('Error loading categories:', error);
-    }
-}
+    async function loadSidebarPopularNews() {
+        try {
+            const snapshot = await db.collection('articles')
+                .where('status', '==', 'published')
+                .orderBy('views', 'desc')
+                .limit(5)
+                .get();
 
-function formatRelativeTime(dateString) {
-    try {
-        const date = new Date(dateString);
-        const now = new Date();
-        const diffTime = Math.abs(now - date);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const popularArticles = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+                createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || new Date().toISOString()
+            }));
+
+            const desktopContainer = document.getElementById('sidebarPopularNews');
+            const mobileContainer = document.getElementById('mobilePopularNews');
+            
+            if (popularArticles.length === 0) {
+                const emptyMessage = `
+                    <div style="text-align: center; padding: 1rem; color: #718096;">
+                        <p>Belum ada artikel populer</p>
+                    </div>
+                `;
+                if (desktopContainer) desktopContainer.innerHTML = emptyMessage;
+                if (mobileContainer) mobileContainer.innerHTML = emptyMessage;
+                return;
+            }
+            
+            const popularHTML = popularArticles.map(article => `
+                <div class="popular-sidebar-item" onclick="viewRelatedArticle('${article.id}')">
+                    <div class="popular-sidebar-image" style="background-image: url('${article.image}')"></div>
+                    <div class="popular-sidebar-content">
+                        <h4 class="popular-sidebar-title">${article.title}</h4>
+                        <div class="popular-sidebar-meta">
+                            ${article.views || 0} dilihat • ${formatRelativeTime(article.createdAt)}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            if (desktopContainer) desktopContainer.innerHTML = popularHTML;
+            if (mobileContainer) mobileContainer.innerHTML = popularHTML;
+        } catch (error) {
+            console.error('Error loading popular news:', error);
+        }
+    }
+
+    async function loadSidebarCategories() {
+        try {
+            let categoriesData = [];
+            try {
+                const snapshot = await db.collection('categories').where('isActive', '==', true).orderBy('order').get();
+                categoriesData = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+            } catch (error) {
+                categoriesData = ['Pemerintahan', 'Pertanian', 'Kesehatan', 'Pendidikan', 'Ekonomi', 'Keamanan', 'Pembangunan', 'Lingkungan', 'Sosial']
+                    .map(name => ({ id: name, name }));
+            }
+
+            const desktopContainer = document.getElementById('sidebarCategories');
+            const mobileContainer = document.getElementById('mobileCategories');
+            
+            const categoriesWithCounts = await Promise.all(
+                categoriesData.map(async (category) => {
+                    const snapshot = await db.collection('articles')
+                        .where('status', '==', 'published')
+                        .where('category', '==', category.name)
+                        .get();
+                    return {
+                        ...category,
+                        count: snapshot.size
+                    };
+                })
+            );
+            
+            const categoriesHTML = categoriesWithCounts.map(category => {
+                return `
+                    <li class="categories-sidebar-item">
+                        <a href="#" class="categories-sidebar-link" onclick="filterByCategory('${category.name}')">
+                            ${category.name}
+                            <span class="category-sidebar-count">${category.count}</span>
+                        </a>
+                    </li>
+                `;
+            }).join('');
+            
+            if (desktopContainer) desktopContainer.innerHTML = categoriesHTML;
+            if (mobileContainer) mobileContainer.innerHTML = categoriesHTML;
+        } catch (error) {
+            console.error('Error loading categories:', error);
+        }
+    }
+
+    function formatRelativeTime(dateString) {
+        try {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 1) return '1 hari lalu';
+            if (diffDays < 7) return `${diffDays} hari lalu`;
+            if (diffDays < 30) return `${Math.floor(diffDays / 7)} minggu lalu`;
+            return `${Math.floor(diffDays / 30)} bulan lalu`;
+        } catch (e) {
+            return 'Beberapa waktu lalu';
+        }
+    }
+
+    function viewRelatedArticle(articleId) {
+        localStorage.setItem('currentArticle', articleId);
+        window.location.reload();
+    }
+
+    function setupShareButtons(article) {
+        const currentUrl = window.location.href;
+        const title = encodeURIComponent(article.title);
         
-        if (diffDays === 1) return '1 hari lalu';
-        if (diffDays < 7) return `${diffDays} hari lalu`;
-        if (diffDays < 30) return `${Math.floor(diffDays / 7)} minggu lalu`;
-        return `${Math.floor(diffDays / 30)} bulan lalu`;
-    } catch (e) {
-        return 'Beberapa waktu lalu';
-    }
-}
-
-function viewRelatedArticle(articleId) {
-    localStorage.setItem('currentArticle', articleId);
-    window.location.reload();
-}
-
-function setupShareButtons(article) {
-    const currentUrl = window.location.href;
-    const title = encodeURIComponent(article.title);
-    
-    // Facebook
-    const facebookBtn = document.getElementById('shareFacebook');
-    if (facebookBtn) {
-        facebookBtn.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}&quote=${title}`;
-        facebookBtn.target = '_blank';
-    }
-    
-    // Twitter
-    const twitterBtn = document.getElementById('shareTwitter');
-    if (twitterBtn) {
-        twitterBtn.href = `https://twitter.com/intent/tweet?text=${title}&url=${encodeURIComponent(currentUrl)}`;
-        twitterBtn.target = '_blank';
-    }
-    
-    // WhatsApp
-    const whatsappBtn = document.getElementById('shareWhatsapp');
-    if (whatsappBtn) {
-        whatsappBtn.href = `https://wa.me/?text=${title}%20${encodeURIComponent(currentUrl)}`;
-        whatsappBtn.target = '_blank';
-    }
-    
-    // Telegram
-    const telegramBtn = document.getElementById('shareTelegram');
-    if (telegramBtn) {
-        telegramBtn.href = `https://t.me/share/url?url=${encodeURIComponent(currentUrl)}&text=${title}`;
-        telegramBtn.target = '_blank';
-    }
-    
-    // Copy Link
-    const linkBtn = document.getElementById('shareLink');
-    if (linkBtn) {
-        linkBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            navigator.clipboard.writeText(currentUrl).then(() => {
-                alert('Link artikel berhasil disalin!');
-            }).catch(() => {
-                // Fallback for older browsers
-                const textArea = document.createElement('textarea');
-                textArea.value = currentUrl;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                alert('Link artikel berhasil disalin!');
+        const facebookBtn = document.getElementById('shareFacebook');
+        if (facebookBtn) {
+            facebookBtn.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}&quote=${title}`;
+            facebookBtn.target = '_blank';
+        }
+        
+        const twitterBtn = document.getElementById('shareTwitter');
+        if (twitterBtn) {
+            twitterBtn.href = `https://twitter.com/intent/tweet?text=${title}&url=${encodeURIComponent(currentUrl)}`;
+            twitterBtn.target = '_blank';
+        }
+        
+        const whatsappBtn = document.getElementById('shareWhatsapp');
+        if (whatsappBtn) {
+            whatsappBtn.href = `https://wa.me/?text=${title}%20${encodeURIComponent(currentUrl)}`;
+            whatsappBtn.target = '_blank';
+        }
+        
+        const telegramBtn = document.getElementById('shareTelegram');
+        if (telegramBtn) {
+            telegramBtn.href = `https://t.me/share/url?url=${encodeURIComponent(currentUrl)}&text=${title}`;
+            telegramBtn.target = '_blank';
+        }
+        
+        const linkBtn = document.getElementById('shareLink');
+        if (linkBtn) {
+            linkBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                navigator.clipboard.writeText(currentUrl).then(() => {
+                    alert('Link artikel berhasil disalin!');
+                }).catch(() => {
+                    const textArea = document.createElement('textarea');
+                    textArea.value = currentUrl;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    alert('Link artikel berhasil disalin!');
+                });
             });
-        });
+        }
     }
-}
 
-function searchByTag(tag) {
-    localStorage.setItem('searchTerm', tag);
-    window.open('search.html', '_blank');
-}
-
-function filterByCategory(category) {
-    localStorage.setItem('currentFilter', category);
-    window.location.href = 'index.html';
-}
-
-function setupEventListeners() {
-    // Mobile menu
-    const mobileMenu = document.querySelector('.mobile-menu');
-    const nav = document.querySelector('nav ul');
-    
-    if (mobileMenu && nav) {
-        mobileMenu.addEventListener('click', function() {
-            nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
-        });
+    function searchByTag(tag) {
+        localStorage.setItem('searchTerm', tag);
+        window.open('search.html', '_blank');
     }
-}
 
-function showArticleNotFound() {
-    document.querySelector('.article-content').innerHTML = `
-        <div class="container" style="text-align: center; padding: 4rem 0;">
-            <i class="fas fa-exclamation-circle" style="font-size: 4rem; color: #e53e3e; margin-bottom: 1rem;"></i>
-            <h2 style="color: #2d3748; margin-bottom: 1rem;">Artikel Tidak Ditemukan</h2>
-            <p style="color: #718096; margin-bottom: 2rem;">Artikel yang Anda cari tidak tersedia atau telah dihapus.</p>
-            <a href="index.html" class="btn" style="padding: 0.75rem 2rem;">Kembali ke Beranda</a>
-        </div>
-    `;
-}
-</script>
+    function filterByCategory(category) {
+        localStorage.setItem('currentFilter', category);
+        window.location.href = 'index.html';
+    }
+
+    function setupEventListeners() {
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const nav = document.querySelector('nav ul');
+        
+        if (mobileMenu && nav) {
+            mobileMenu.addEventListener('click', function() {
+                nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+            });
+        }
+    }
+
+    function showArticleNotFound() {
+        document.querySelector('.article-content').innerHTML = `
+            <div class="container" style="text-align: center; padding: 4rem 0;">
+                <i class="fas fa-exclamation-circle" style="font-size: 4rem; color: #e53e3e; margin-bottom: 1rem;"></i>
+                <h2 style="color: #2d3748; margin-bottom: 1rem;">Artikel Tidak Ditemukan</h2>
+                <p style="color: #718096; margin-bottom: 2rem;">Artikel yang Anda cari tidak tersedia atau telah dihapus.</p>
+                <a href="index.html" class="btn" style="padding: 0.75rem 2rem;">Kembali ke Beranda</a>
+            </div>
+        `;
+    }
+    </script>
 </body>
 </html>

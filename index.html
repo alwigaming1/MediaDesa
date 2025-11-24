@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DesaMedia - Portal Berita Desa Terkini</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --primary-light: #2d4a80;
+            --secondary: #d4af37;
+            --accent: #e53e3e;
+            --dark: #1a202c;
+            --light: #f7fafc;
+            --gray: #718096;
+            --gray-light: #e2e8f0;
+            --white: #ffffff;
+            --transition: all 0.3s ease;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--white);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .section {
+            padding: 4rem 0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--secondary);
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+        }
+
+        .header-top {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 0.5rem 0;
+            font-size: 0.875rem;
+        }
+
+        .header-top-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-top-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .header-top-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-top a {
+            color: var(--white);
+        }
+
+        .header-top a:hover {
+            color: var(--secondary);
+        }
+
+        .header-main {
+            padding: 1rem 0;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .logo-tagline {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-top: -5px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav ul li a {
+            font-weight: 500;
+            color: var(--dark);
+            position: relative;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        nav ul li a.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        nav ul li a.active::after {
+            width: 100%;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-btn {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Breaking News */
+        .breaking-news {
+            background-color: var(--accent);
+            color: var(--white);
+            padding: 0.75rem 0;
+        }
+
+        .breaking-news-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .breaking-label {
+            background-color: var(--dark);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .breaking-content {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .breaking-text {
+            white-space: nowrap;
+            animation: scrollText 20s linear infinite;
+        }
+
+        @keyframes scrollText {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 3rem 0;
+            background-color: var(--light);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .hero-main {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .hero-image {
+            height: 400px;
+            background-color: var(--gray-light);
+            background-image: url('https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: var(--white);
+        }
+
+        .hero-category {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: var(--secondary);
+            color: var(--dark);
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-title {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .hero-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .side-news {
+            display: flex;
+            gap: 1rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .side-news:last-child {
+            border-bottom: none;
+        }
+
+        .side-image {
+            width: 100px;
+            height: 80px;
+            background-color: var(--gray-light);
+            border-radius: 4px;
+            flex-shrink: 0;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .side-content {
+            flex: 1;
+        }
+
+        .side-title {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .side-meta {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        /* Featured News */
+        .featured-news {
+            padding: 3rem 0;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .news-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .news-image {
+            height: 200px;
+            background-color: var(--gray-light);
+            background-size: cover;
+            background-position: center;
+        }
+
+        .news-content {
+            padding: 1.5rem;
+        }
+
+        .news-category {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: var(--primary-light);
+            color: var(--white);
+            font-size: 0.75rem;
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
+        }
+
+        .news-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-excerpt {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* Categories */
+        .categories {
+            padding: 3rem 0;
+            background-color: var(--light);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .category-card {
+            background-color: var(--white);
+            padding: 2rem 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .category-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .category-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-count {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* Latest News */
+        .latest-news {
+            padding: 3rem 0;
+        }
+
+        .latest-news-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+        }
+
+        .news-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .news-item {
+            display: flex;
+            gap: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+        }
+
+        .news-item-image {
+            width: 200px;
+            height: 130px;
+            background-color: var(--gray-light);
+            border-radius: 4px;
+            background-size: cover;
+            background-position: center;
+            flex-shrink: 0;
+        }
+
+        .news-item-content {
+            flex: 1;
+        }
+
+        .news-item-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-item-excerpt {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .news-item-meta {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .sidebar {
+            background-color: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .sidebar-title {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .popular-news {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .popular-item {
+            display: flex;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .popular-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .popular-rank {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            flex-shrink: 0;
+            width: 30px;
+        }
+
+        .popular-content {
+            flex: 1;
+        }
+
+        .popular-title {
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .popular-meta {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        /* Video Section */
+        .video-section {
+            padding: 3rem 0;
+            background-color: var(--light);
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .video-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            height: 180px;
+            background-color: var(--gray-light);
+            background-size: cover;
+            background-position: center;
+        }
+
+        .video-play {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.25rem;
+        }
+
+        .video-content {
+            padding: 1.5rem;
+        }
+
+        .video-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--white);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo span {
+            color: var(--secondary);
+        }
+
+        .footer-about p {
+            color: #a0a0a0;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            background-color: var(--primary);
+        }
+
+        .footer-title {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background-color: var(--secondary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #a0a0a0;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .news-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .latest-news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .video-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-top {
+                display: none;
+            }
+            
+            nav ul {
+                display: none;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .news-item {
+                flex-direction: column;
+            }
+            
+            .news-item-image {
+                width: 100%;
+            }
+            
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Top -->
+    <div class="header-top">
+        <div class="container header-top-container">
+            <div class="header-top-left">
+                <span><i class="fas fa-map-marker-alt"></i> Desa Sukamaju, Kec. Sukajaya</span>
+                <span><i class="fas fa-clock"></i> Senin - Jumat: 08:00 - 16:00</span>
+            </div>
+            <div class="header-top-right">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Main -->
+    <header>
+        <div class="header-main">
+            <div class="container header-container">
+                <div class="logo-area">
+                    <a href="index.html" class="logo">Desa<span>Media</span></a>
+                    <div class="logo-tagline">Portal Berita Desa Terpercaya</div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html" class="active">Beranda</a></li>
+                        <li><a href="berita.html">Berita</a></li>
+                        <li><a href="pemerintahan.html">Pemerintahan</a></li>
+                        <li><a href="pembangunan.html">Pembangunan</a></li>
+                        <li><a href="ekonomi.html">Ekonomi</a></li>
+                        <li><a href="pendidikan.html">Pendidikan</a></li>
+                        <li><a href="kesehatan.html">Kesehatan</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                    <div class="mobile-menu">☰</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breaking News -->
+    <div class="breaking-news">
+        <div class="container breaking-news-container">
+            <div class="breaking-label">BREAKING</div>
+            <div class="breaking-content">
+                <div class="breaking-text">Pembangunan Jalan Desa Sukamaju Tahap II Telah Dimulai - Diharapkan Selesai dalam 6 Bulan</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-main">
+                    <div class="hero-image"></div>
+                    <div class="hero-content">
+                        <span class="hero-category">PEMBANGUNAN</span>
+                        <h2 class="hero-title">Pembangunan Pusat Kesehatan Masyarakat Desa Resmi Dimulai</h2>
+                        <div class="hero-meta">
+                            <span><i class="far fa-calendar"></i> 15 Juli 2023</span>
+                            <span><i class="far fa-user"></i> Admin Desa</span>
+                            <span><i class="far fa-eye"></i> 1.2K Dilihat</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-sidebar">
+                    <div class="side-news">
+                        <div class="side-image" style="background-image: url('https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')"></div>
+                        <div class="side-content">
+                            <h3 class="side-title">Panen Raya Padi Capai 7 Ton per Hektar</h3>
+                            <div class="side-meta">14 Juli 2023 • 850 dilihat</div>
+                        </div>
+                    </div>
+                    <div class="side-news">
+                        <div class="side-image" style="background-image: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')"></div>
+                        <div class="side-content">
+                            <h3 class="side-title">Festival Budaya Desa Akan Digelar Bulan Depan</h3>
+                            <div class="side-meta">13 Juli 2023 • 720 dilihat</div>
+                        </div>
+                    </div>
+                    <div class="side-news">
+                        <div class="side-image" style="background-image: url('https://images.unsplash.com/photo-1593115057322-e94b77572f20?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')"></div>
+                        <div class="side-content">
+                            <h3 class="side-title">Program Beasiswa untuk 20 Pelajar Berprestasi</h3>
+                            <div class="side-meta">12 Juli 2023 • 650 dilihat</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured News -->
+    <section class="featured-news section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Berita Terbaru</h2>
+                <a href="berita.html" class="btn btn-outline">Lihat Semua</a>
+            </div>
+            <div class="news-grid">
+                <article class="news-card">
+                    <div class="news-image" style="background-image: url('https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')"></div>
+                    <div class="news-content">
+                        <span class="news-category">PEMBANGUNAN</span>
+                        <h3 class="news-title">Pembangunan Jalan Desa Selesai Tepat Waktu</h3>
+                        <p class="news-excerpt">Proyek pembangunan jalan desa sepanjang 5 km telah selesai tepat waktu dan akan segera diresmikan oleh Bupati.</p>
+                        <div class="news-meta">
+                            <span>15 Juli 2023</span>
+                            <span>Oleh: Admin</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="news-card">
+                    <div class="news-image" style="background-image: url('https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')"></div>
+                    <div class="news-content">
+                        <span class="news-category">PERTANIAN</span>
+                        <h3 class="news-title">Panen Raya Padi Desa Makmur Capai Rekor Tertinggi</h3>
+                        <p class="news-excerpt">Produktivitas padi di Desa Makmur meningkat 25% berkat penerapan teknologi pertanian modern.</p>
+                        <div class="news-meta">
+                            <span>12 Juli 2023</span>
+                            <span>Oleh: Redaksi</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="news-card">
+                    <div class="news-image" style="background-image: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')"></div>
+                    <div class="news-content">
+                        <span class="news-category">PENDIDIKAN</span>
+                        <h3 class="news-title">Program Beasiswa untuk Anak Berprestasi di Desa</h3>
+                        <p class="news-excerpt">Pemerintah desa memberikan beasiswa kepada 15 siswa berprestasi untuk melanjutkan pendidikan ke jenjang yang lebih tinggi.</p>
+                        <div class="news-meta">
+                            <span>10 Juli 2023</span>
+                            <span>Oleh: Tim Pendidikan</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="categories section">
+        <div class="container">
+            <h2 class="section-title">Kategori Berita</h2>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-icon">🏛️</div>
+                    <h3 class="category-title">Pemerintahan</h3>
+                    <p class="category-count">24 Artikel</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🌾</div>
+                    <h3 class="category-title">Pertanian</h3>
+                    <p class="category-count">18 Artikel</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🏥</div>
+                    <h3 class="category-title">Kesehatan</h3>
+                    <p class="category-count">15 Artikel</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🎓</div>
+                    <h3 class="category-title">Pendidikan</h3>
+                    <p class="category-count">22 Artikel</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest News -->
+    <section class="latest-news section">
+        <div class="container">
+            <div class="latest-news-grid">
+                <div class="news-list">
+                    <h2 class="section-title">Berita Terkini</h2>
+                    <article class="news-item">
+                        <div class="news-item-image" style="background-image: url('https://images.unsplash.com/photo-1593115057322-e94b77572f20?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')"></div>
+                        <div class="news-item-content">
+                            <h3 class="news-item-title">Festival Budaya Desa Tahun Ini Akan Menampilkan Kesenian Tradisional</h3>
+                            <p class="news-item-excerpt">Festival budaya tahunan desa akan diadakan bulan depan dengan menampilkan berbagai kesenian tradisional yang hampir punah.</p>
+                            <div class="news-item-meta">
+                                <span>8 Juli 2023</span> • <span>Pemerintahan</span>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="news-item">
+                        <div class="news-item-image" style="background-image: url('https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')"></div>
+                        <div class="news-item-content">
+                            <h3 class="news-item-title">Pelatihan Teknologi Pertanian untuk Petani Muda</h3>
+                            <p class="news-item-excerpt">Dinas Pertanian kabupaten mengadakan pelatihan teknologi pertanian modern untuk 50 petani muda dari berbagai desa.</p>
+                            <div class="news-item-meta">
+                                <span>5 Juli 2023</span> • <span>Pertanian</span>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="news-item">
+                        <div class="news-item-image" style="background-image: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')"></div>
+                        <div class="news-item-content">
+                            <h3 class="news-item-title">Posyandu Desa Catat Penurunan Angka Stunting</h3>
+                            <p class="news-item-excerpt">Berkat program intervensi gizi, angka stunting di desa mengalami penurunan signifikan dari 15% menjadi 8% dalam setahun terakhir.</p>
+                            <div class="news-item-meta">
+                                <span>3 Juli 2023</span> • <span>Kesehatan</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                <aside class="sidebar">
+                    <h3 class="sidebar-title">Berita Populer</h3>
+                    <div class="popular-news">
+                        <div class="popular-item">
+                            <div class="popular-rank">1</div>
+                            <div class="popular-content">
+                                <h4 class="popular-title">Program Bantuan UMKM Desa Ditingkatkan</h4>
+                                <div class="popular-meta">1.2K dilihat • 2 hari lalu</div>
+                            </div>
+                        </div>
+                        <div class="popular-item">
+                            <div class="popular-rank">2</div>
+                            <div class="popular-content">
+                                <h4 class="popular-title">Wisata Alam Desa Mulai Dilirik Wisatawan</h4>
+                                <div class="popular-meta">980 dilihat • 3 hari lalu</div>
+                            </div>
+                        </div>
+                        <div class="popular-item">
+                            <div class="popular-rank">3</div>
+                            <div class="popular-content">
+                                <h4 class="popular-title">Pembangunan Pusat Kesehatan Desa Dimulai</h4>
+                                <div class="popular-meta">850 dilihat • 4 hari lalu</div>
+                            </div>
+                        </div>
+                        <div class="popular-item">
+                            <div class="popular-rank">4</div>
+                            <div class="popular-content">
+                                <h4 class="popular-title">Pelatihan Digital Marketing untuk Produk Lokal</h4>
+                                <div class="popular-meta">720 dilihat • 5 hari lalu</div>
+                            </div>
+                        </div>
+                        <div class="popular-item">
+                            <div class="popular-rank">5</div>
+                            <div class="popular-content">
+                                <h4 class="popular-title">Festival Kuliner Tradisional Sukses Digelar</h4>
+                                <div class="popular-meta">650 dilihat • 6 hari lalu</div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Section -->
+    <section class="video-section section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Video Terbaru</h2>
+                <a href="#" class="btn btn-outline">Lihat Semua</a>
+            </div>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-thumbnail" style="background-image: url('https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                        <div class="video-play"><i class="fas fa-play"></i></div>
+                    </div>
+                    <div class="video-content">
+                        <h3 class="video-title">Proses Pembangunan Jalan Desa Sukamaju</h3>
+                        <div class="video-meta">
+                            <span>15 Juli 2023</span>
+                            <span>5:32</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <div class="video-thumbnail" style="background-image: url('https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                        <div class="video-play"><i class="fas fa-play"></i></div>
+                    </div>
+                    <div class="video-content">
+                        <h3 class="video-title">Wawancara dengan Kepala Desa tentang Program Pembangunan</h3>
+                        <div class="video-meta">
+                            <span>12 Juli 2023</span>
+                            <span>8:15</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-card">
+                    <div class="video-thumbnail" style="background-image: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                        <div class="video-play"><i class="fas fa-play"></i></div>
+                    </div>
+                    <div class="video-content">
+                        <h3 class="video-title">Festival Budaya Desa Tahun 2023</h3>
+                        <div class="video-meta">
+                            <span>10 Juli 2023</span>
+                            <span>12:45</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">Desa<span>Media</span></div>
+                    <p>Media berita terpercaya yang mengedepankan informasi akurat dan relevan untuk masyarakat desa. Menjadi jembatan antara pemerintah desa dan masyarakat.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links-container">
+                    <h3 class="footer-title">Kategori</h3>
+                    <ul class="footer-links">
+                        <li><a href="pemerintahan.html">Pemerintahan</a></li>
+                        <li><a href="pertanian.html">Pertanian</a></li>
+                        <li><a href="kesehatan.html">Kesehatan</a></li>
+                        <li><a href="pendidikan.html">Pendidikan</a></li>
+                        <li><a href="ekonomi.html">Ekonomi</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-container">
+                    <h3 class="footer-title">Tautan Cepat</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Beranda</a></li>
+                        <li><a href="tentang.html">Tentang Kami</a></li>
+                        <li><a href="redaksi.html">Redaksi</a></li>
+                        <li><a href="pedoman.html">Pedoman Media</a></li>
+                        <li><a href="kontak.html">Kontak</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-container">
+                    <h3 class="footer-title">Kontak</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt"></i> Jl. Desa No. 123, Kecamatan</li>
+                        <li><i class="fas fa-phone"></i> (021) 1234-5678</li>
+                        <li><i class="fas fa-envelope"></i> info@desamedia.id</li>
+                        <li><i class="fas fa-clock"></i> Senin - Jumat: 08:00 - 16:00</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 DesaMedia. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu').addEventListener('click', function() {
+            const nav = document.querySelector('nav ul');
+            if (nav.style.display === 'flex') {
+                nav.style.display = 'none';
+            } else {
+                nav.style.display = 'flex';
+                nav.style.flexDirection = 'column';
+                nav.style.position = 'absolute';
+                nav.style.top = '100%';
+                nav.style.left = '0';
+                nav.style.width = '100%';
+                nav.style.backgroundColor = 'var(--white)';
+                nav.style.padding = '1rem 0';
+                nav.style.boxShadow = '0 5px 10px rgba(0,0,0,0.1)';
+            }
+        });
+
+        // Search functionality
+        document.querySelector('.search-btn').addEventListener('click', function() {
+            alert('Fitur pencarian akan segera tersedia!');
+        });
+
+        // Video play functionality
+        document.querySelectorAll('.video-play').forEach(button => {
+            button.addEventListener('click', function() {
+                alert('Video akan diputar!');
+            });
+        });
+
+        // Simple fade-in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Apply animation to elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('.news-card, .category-card, .news-item, .video-card');
+            
+            animatedElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

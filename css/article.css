@@ -9,8 +9,8 @@
     --gray-light: #e2e8f0;
     --white: #ffffff;
     --transition: all 0.3s ease;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 * {
@@ -63,7 +63,7 @@ img {
     background-color: var(--primary);
     color: var(--white);
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-weight: 500;
     cursor: pointer;
     transition: var(--transition);
@@ -86,7 +86,7 @@ img {
 }
 
 .section {
-    padding: 4rem 0;
+    padding: 3rem 0;
 }
 
 .section-header {
@@ -124,10 +124,10 @@ header {
 }
 
 .header-top {
-    background-color: var(--primary);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
     color: var(--white);
-    padding: 0.5rem 0;
-    font-size: 0.875rem;
+    padding: 0.4rem 0;
+    font-size: 0.8rem;
 }
 
 .header-top-container {
@@ -157,7 +157,9 @@ header {
 }
 
 .header-main {
-    padding: 1rem 0;
+    padding: 0.8rem 0;
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-light);
 }
 
 .header-container {
@@ -168,7 +170,7 @@ header {
 
 .logo {
     font-family: 'Playfair Display', serif;
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--primary);
 }
@@ -180,47 +182,32 @@ header {
 .logo-tagline {
     font-size: 0.75rem;
     color: var(--gray);
-    margin-top: -5px;
+    margin-top: -3px;
 }
 
 nav ul {
     display: flex;
     list-style: none;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 nav ul li a {
     font-weight: 500;
+    font-size: 0.9rem;
     color: var(--dark);
-    position: relative;
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    transition: var(--transition);
 }
 
 nav ul li a:hover {
+    background: var(--light);
     color: var(--primary);
 }
 
 nav ul li a.active {
-    color: var(--primary);
-    font-weight: 600;
-}
-
-nav ul li a.active::after {
-    width: 100%;
-}
-
-nav ul li a::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: var(--primary);
-    transition: var(--transition);
-}
-
-nav ul li a:hover::after {
-    width: 100%;
+    background: var(--primary);
+    color: var(--white);
 }
 
 .header-actions {
@@ -243,95 +230,71 @@ nav ul li a:hover::after {
     cursor: pointer;
 }
 
-/* Breaking News */
-.breaking-news {
-    background-color: var(--accent);
-    color: var(--white);
-    padding: 0.75rem 0;
-}
-
-.breaking-news-container {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.breaking-label {
-    background-color: var(--dark);
-    padding: 0.25rem 0.75rem;
-    border-radius: 4px;
-    font-weight: 600;
-    font-size: 0.875rem;
-}
-
-.breaking-content {
-    flex: 1;
-    overflow: hidden;
-}
-
-.breaking-text {
-    white-space: nowrap;
-    animation: scrollText 20s linear infinite;
-}
-
-@keyframes scrollText {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
-}
-
-/* PERBAIKAN: Article Content - Lebih Lebar */
+/* Article Layout */
 .article-content {
-    padding: 3rem 0;
+    padding: 2rem 0;
     background: #ffffff;
 }
 
-.article-container {
-    max-width: 1000px; /* Diperlebar dari 800px */
+.article-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 2rem;
-    display: block; /* Hilangkan grid system */
+    padding: 0 1.5rem;
 }
 
 .article-main {
-    background-color: var(--white);
-    border-radius: 8px;
-    overflow: hidden;
+    background: #ffffff;
     width: 100%;
 }
 
+.article-sidebar {
+    background: #f7fafc;
+    border-radius: 8px;
+    padding: 1.5rem;
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+    border: 1px solid #e2e8f0;
+}
+
 .article-header {
+    text-align: left;
     margin-bottom: 2rem;
-    text-align: center;
+    padding: 0;
+}
+
+.article-category-wrapper {
+    margin-bottom: 0.5rem;
 }
 
 .article-category {
     display: inline-block;
-    padding: 0.5rem 1.5rem;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-    color: var(--white);
-    font-size: 0.875rem;
-    font-weight: 600;
-    border-radius: 25px;
-    margin-bottom: 1.5rem;
+    font-size: 0.75rem;
+    color: #718096;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    font-weight: 500;
 }
 
 .article-title {
-    font-size: 2.5rem;
-    line-height: 1.2;
-    margin-bottom: 1.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    color: #1a202c;
     font-weight: 700;
-    max-width: 100%;
 }
 
 .article-meta {
     display: flex;
+    justify-content: flex-start;
     align-items: center;
-    justify-content: center;
     gap: 1.5rem;
-    color: var(--gray);
-    font-size: 0.9rem;
+    color: #718096;
+    font-size: 0.85rem;
     margin-bottom: 1.5rem;
     flex-wrap: wrap;
 }
@@ -339,51 +302,53 @@ nav ul li a:hover::after {
 .article-meta span {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
 }
 
 .article-image {
     width: 100%;
-    height: 450px; /* Sedikit lebih tinggi */
-    background-color: var(--gray-light);
-    border-radius: 12px;
-    margin-bottom: 2rem;
+    height: 350px;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
     background-size: cover;
     background-position: center;
     box-shadow: var(--shadow-lg);
 }
 
 .article-body {
-    font-size: 1.125rem;
-    line-height: 1.8;
+    font-size: 1.05rem;
+    line-height: 1.7;
     color: #2d3748;
-    max-width: 100%;
 }
 
 .article-body p {
-    margin-bottom: 1.5rem;
-    text-align: justify;
+    margin-bottom: 1.2rem;
+    text-align: left;
 }
 
 .article-body h2 {
-    font-size: 1.75rem;
-    margin: 2.5rem 0 1.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin: 2rem 0 1rem;
+    color: #1a202c;
     padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--secondary);
+    border-bottom: 2px solid #d4af37;
 }
 
 .article-body h3 {
-    font-size: 1.5rem;
-    margin: 2rem 0 1rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    margin: 1.5rem 0 0.8rem;
+    color: #1a202c;
 }
 
 .article-body blockquote {
-    border-left: 4px solid var(--secondary);
+    border-left: 4px solid #d4af37;
     padding: 1.5rem 2rem;
     margin: 2rem 0;
-    background: var(--light);
+    background: #f7fafc;
     font-style: italic;
-    color: var(--gray);
+    color: #4a5568;
     border-radius: 0 8px 8px 0;
 }
 
@@ -400,161 +365,282 @@ nav ul li a:hover::after {
 .article-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
-    margin: 3rem 0 2rem;
-    padding: 2rem 0;
-    border-top: 1px solid var(--gray-light);
-    border-bottom: 1px solid var(--gray-light);
+    gap: 0.5rem;
+    margin: 2rem 0 1.5rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .tag {
     display: inline-block;
-    padding: 0.5rem 1.25rem;
+    padding: 0.4rem 1rem;
     background: #edf2f7;
     color: #4a5568;
-    border-radius: 20px;
-    font-size: 0.875rem;
+    border-radius: 16px;
+    font-size: 0.8rem;
     font-weight: 500;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     text-decoration: none;
 }
 
 .tag:hover {
-    background: var(--primary);
-    color: var(--white);
-    transform: translateY(-2px);
+    background: #1a365d;
+    color: white;
 }
 
 .article-share {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    margin: 2rem 0;
-    padding: 2rem;
-    background: var(--light);
-    border-radius: 12px;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: #f7fafc;
+    border-radius: 8px;
 }
 
 .share-label {
     font-weight: 600;
-    color: var(--dark);
-    font-size: 1.1rem;
+    color: #2d3748;
+    font-size: 1rem;
 }
 
 .share-buttons {
     display: flex;
-    gap: 0.75rem;
+    gap: 0.5rem;
 }
 
 .share-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 45px;
-    height: 45px;
-    background: var(--white);
-    border: 2px solid var(--gray-light);
+    width: 40px;
+    height: 40px;
+    background: white;
+    border: 1px solid #e2e8f0;
     border-radius: 50%;
-    transition: var(--transition);
-    color: var(--gray);
+    transition: all 0.3s ease;
+    color: #4a5568;
     text-decoration: none;
 }
 
 .share-btn:hover {
-    background: var(--primary);
-    color: var(--white);
-    border-color: var(--primary);
-    transform: translateY(-2px);
+    background: #1a365d;
+    color: white;
+    border-color: #1a365d;
 }
 
 .article-author {
     display: flex;
-    gap: 1.5rem;
-    padding: 2.5rem;
-    background: linear-gradient(135deg, var(--light) 0%, #edf2f7 100%);
-    border-radius: 12px;
-    margin: 3rem 0;
+    gap: 1.2rem;
+    padding: 1.5rem;
+    background: #f7fafc;
+    border-radius: 8px;
+    margin: 2rem 0;
     align-items: center;
 }
 
 .author-avatar {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    background-color: var(--gray-light);
+    background: #e2e8f0;
     flex-shrink: 0;
     background-size: cover;
     background-position: center;
-    border: 4px solid var(--white);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: 3px solid white;
+}
+
+.author-info {
+    flex: 1;
 }
 
 .author-info h3 {
-    margin-bottom: 0.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    margin-bottom: 0.4rem;
+    color: #1a202c;
 }
 
 .author-bio {
-    color: var(--gray);
-    font-size: 1rem;
-    line-height: 1.6;
+    color: #718096;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* SIDEBAR STYLES */
+.sidebar-widget {
+    margin-bottom: 2rem;
+}
+
+.sidebar-widget:last-child {
+    margin-bottom: 0;
+}
+
+.widget-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #d4af37;
+    color: #1a202c;
+}
+
+.popular-sidebar-item {
+    display: flex;
+    gap: 0.8rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #e2e8f0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.popular-sidebar-item:hover {
+    background: #edf2f7;
+    padding-left: 0.5rem;
+    border-radius: 4px;
+}
+
+.popular-sidebar-item:last-child {
+    border-bottom: none;
+}
+
+.popular-sidebar-image {
+    width: 70px;
+    height: 50px;
+    border-radius: 4px;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+}
+
+.popular-sidebar-content {
+    flex: 1;
+}
+
+.popular-sidebar-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 0.2rem;
+    color: #2d3748;
+}
+
+.popular-sidebar-meta {
+    font-size: 0.7rem;
+    color: #718096;
+}
+
+.categories-sidebar-list {
+    list-style: none;
+}
+
+.categories-sidebar-item {
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.categories-sidebar-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.categories-sidebar-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #4a5568;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.categories-sidebar-link:hover {
+    background: #edf2f7;
+    color: #1a365d;
+}
+
+.category-sidebar-count {
+    background: #1a365d;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* MOBILE SIDEBAR - akan muncul di bawah konten */
+.mobile-sidebar {
+    display: none;
+    background: #f7fafc;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    border: 1px solid #e2e8f0;
 }
 
 /* Related News */
 .related-news {
-    padding: 4rem 0;
+    padding: 3rem 0;
     background-color: var(--light);
 }
 
 .news-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    gap: 1.5rem;
 }
 
 .news-card {
-    background-color: var(--white);
+    background: var(--white);
     border-radius: 8px;
     overflow: hidden;
     box-shadow: var(--shadow);
     transition: var(--transition);
     cursor: pointer;
+    border: 1px solid var(--gray-light);
 }
 
 .news-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-3px);
     box-shadow: var(--shadow-lg);
 }
 
 .news-image {
-    height: 200px;
+    height: 180px;
     background-color: var(--gray-light);
     background-size: cover;
     background-position: center;
 }
 
 .news-content {
-    padding: 1.5rem;
+    padding: 1.2rem;
 }
 
 .news-category {
     display: inline-block;
-    padding: 0.25rem 0.75rem;
-    background-color: var(--primary-light);
+    padding: 0.2rem 0.8rem;
+    background: var(--primary);
     color: var(--white);
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     border-radius: 4px;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.6rem;
 }
 
 .news-title {
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+    line-height: 1.4;
 }
 
 .news-excerpt {
     color: var(--gray);
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    margin-bottom: 0.8rem;
 }
 
 .news-meta {
@@ -568,14 +654,14 @@ nav ul li a:hover::after {
 footer {
     background-color: var(--dark);
     color: var(--white);
-    padding: 4rem 0 2rem;
+    padding: 3rem 0 1.5rem;
 }
 
 .footer-content {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 2rem;
-    margin-bottom: 3rem;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .footer-logo {
@@ -657,20 +743,8 @@ footer {
     font-size: 0.9rem;
 }
 
-/* PERBAIKAN: Responsive Design untuk Lebar yang Diperbesar */
-@media (max-width: 1200px) {
-    .article-container {
-        max-width: 900px;
-        padding: 0 2rem;
-    }
-}
-
+/* RESPONSIVE DESIGN */
 @media (max-width: 992px) {
-    .article-container {
-        max-width: 100%;
-        padding: 0 1.5rem;
-    }
-    
     .news-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -693,208 +767,6 @@ footer {
         display: block;
     }
     
-    .article-title {
-        font-size: 2rem;
-    }
-    
-    .article-image {
-        height: 300px;
-    }
-    
-    .article-container {
-        padding: 0 1rem;
-    }
-    
-    .news-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .article-author {
-        flex-direction: column;
-        text-align: center;
-        padding: 2rem;
-    }
-    
-    .author-avatar {
-        width: 80px;
-        height: 80px;
-    }
-    
-    .article-share {
-        flex-direction: column;
-        text-align: center;
-        gap: 1rem;
-    }
-    
-    .share-buttons {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    .footer-content {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 480px) {
-    .article-title {
-        font-size: 1.75rem;
-    }
-    
-    .article-image {
-        height: 250px;
-    }
-    
-    .article-meta {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    
-    .article-body {
-        font-size: 1rem;
-    }
-}
-
-/* PERBAIKAN: Untuk layar sangat besar */
-@media (min-width: 1400px) {
-    .article-container {
-        max-width: 1200px;
-    }
-}
-/* PERBAIKAN: Tambahkan CSS untuk layout dengan sidebar */
-.article-layout {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 3rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
-
-.article-sidebar {
-    background: #f7fafc;
-    border-radius: 12px;
-    padding: 2rem;
-    height: fit-content;
-    position: sticky;
-    top: 100px;
-}
-
-.mobile-sidebar {
-    display: none;
-    background: #f7fafc;
-    border-radius: 12px;
-    padding: 2rem;
-    margin-top: 2rem;
-}
-
-/* STYLING SIDEBAR */
-.sidebar-widget {
-    margin-bottom: 2.5rem;
-}
-
-.sidebar-widget:last-child {
-    margin-bottom: 0;
-}
-
-.widget-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.25rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 2px solid #d4af37;
-    color: #1a202c;
-}
-
-.popular-sidebar-item {
-    display: flex;
-    gap: 1rem;
-    padding: 1rem 0;
-    border-bottom: 1px solid #e2e8f0;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.popular-sidebar-item:hover {
-    background: #edf2f7;
-    padding-left: 0.5rem;
-    border-radius: 6px;
-}
-
-.popular-sidebar-item:last-child {
-    border-bottom: none;
-}
-
-.popular-sidebar-image {
-    width: 80px;
-    height: 60px;
-    border-radius: 6px;
-    background-size: cover;
-    background-position: center;
-    flex-shrink: 0;
-}
-
-.popular-sidebar-content {
-    flex: 1;
-}
-
-.popular-sidebar-title {
-    font-size: 0.9rem;
-    font-weight: 600;
-    line-height: 1.4;
-    margin-bottom: 0.25rem;
-    color: #2d3748;
-}
-
-.popular-sidebar-meta {
-    font-size: 0.75rem;
-    color: #718096;
-}
-
-.categories-sidebar-list {
-    list-style: none;
-}
-
-.categories-sidebar-item {
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-.categories-sidebar-item:last-child {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
-}
-
-.categories-sidebar-link {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #4a5568;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    padding: 0.5rem;
-    border-radius: 6px;
-}
-
-.categories-sidebar-link:hover {
-    background: #edf2f7;
-    color: #1a365d;
-    padding-left: 1rem;
-}
-
-.category-sidebar-count {
-    background: #1a365d;
-    color: white;
-    padding: 0.25rem 0.5rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 600;
-}
-
-/* PERBAIKAN: Responsive Design untuk Layout Baru */
-@media (max-width: 768px) {
     .article-layout {
         grid-template-columns: 1fr;
         gap: 0;
@@ -908,11 +780,72 @@ footer {
     .mobile-sidebar {
         display: block; /* Tampilkan mobile sidebar */
     }
+    
+    .article-title {
+        font-size: 1.5rem;
+        line-height: 1.3;
+    }
+    
+    .article-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: left;
+    }
+    
+    .article-image {
+        height: 250px;
+    }
+    
+    .article-body {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+    
+    .article-author {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+    }
+    
+    .author-avatar {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .share-buttons {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .article-share {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .news-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
 }
 
-/* PERBAIKAN: Untuk layar sangat besar */
-@media (min-width: 1400px) {
-    .article-layout {
-        max-width: 1300px;
+@media (max-width: 480px) {
+    .article-title {
+        font-size: 1.3rem;
+    }
+    
+    .article-image {
+        height: 200px;
+    }
+    
+    .section {
+        padding: 2rem 0;
+    }
+    
+    .container {
+        padding: 0 1rem;
     }
 }

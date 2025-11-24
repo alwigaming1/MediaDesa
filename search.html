@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Pencarian - DesaMedia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .search-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .search-info {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .results-count {
+            font-size: 1.1rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+        }
+        
+        .search-suggestions {
+            margin-top: 2rem;
+        }
+        
+        .suggestion-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header-top">
+        <div class="container header-top-container">
+            <div class="header-top-left">
+                <span><i class="fas fa-map-marker-alt"></i> Desa Sukamaju, Kec. Sukajaya</span>
+                <span><i class="fas fa-clock"></i> Senin - Jumat: 08:00 - 16:00</span>
+            </div>
+            <div class="header-top-right">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-main">
+            <div class="container header-container">
+                <div class="logo-area">
+                    <a href="index.html" class="logo">Desa<span>Media</span></a>
+                    <div class="logo-tagline">Portal Berita Desa Terpercaya</div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Beranda</a></li>
+                        <li><a href="#" data-category="Pemerintahan">Pemerintahan</a></li>
+                        <li><a href="#" data-category="Pembangunan">Pembangunan</a></li>
+                        <li><a href="#" data-category="Ekonomi">Ekonomi</a></li>
+                        <li><a href="#" data-category="Pendidikan">Pendidikan</a></li>
+                        <li><a href="#" data-category="Kesehatan">Kesehatan</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <a href="login.html" class="btn btn-outline author-area-btn">
+                        <i class="fas fa-pen"></i> Area Penulis
+                    </a>
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                    <div class="mobile-menu">☰</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search Header -->
+    <section class="search-header">
+        <div class="container">
+            <h1>Hasil Pencarian</h1>
+            <div class="search-box" style="max-width: 600px; margin: 2rem auto 0;">
+                <input type="text" id="mainSearchInput" placeholder="Cari artikel..." 
+                       style="width: 100%; padding: 1rem; border: none; border-radius: 8px; font-size: 1.1rem;">
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Results -->
+    <section class="section">
+        <div class="container">
+            <div class="search-info">
+                <div class="results-count" id="resultsCount">Memuat hasil...</div>
+                <div id="searchQuery"></div>
+            </div>
+
+            <div id="searchResultsContainer">
+                <!-- Results will be loaded here -->
+            </div>
+
+            <div class="no-results" id="noResults" style="display: none;">
+                <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                <h3>Tidak ada hasil ditemukan</h3>
+                <p>Silakan coba dengan kata kunci yang berbeda atau lihat kategori berita kami.</p>
+                
+                <div class="search-suggestions">
+                    <h4>Kategori Populer:</h4>
+                    <div class="suggestion-tags">
+                        <a href="index.html" class="tag" style="background: var(--primary); color: white;">Semua Berita</a>
+                        <a href="#" onclick="filterByCategory('Pemerintahan')" class="tag">Pemerintahan</a>
+                        <a href="#" onclick="filterByCategory('Pembangunan')" class="tag">Pembangunan</a>
+                        <a href="#" onclick="filterByCategory('Pendidikan')" class="tag">Pendidikan</a>
+                        <a href="#" onclick="filterByCategory('Kesehatan')" class="tag">Kesehatan</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <!-- Same as index.html -->
+    </footer>
+
+    <script src="js/utils.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

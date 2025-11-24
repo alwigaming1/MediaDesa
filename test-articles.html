@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Articles - DesaMedia</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+        .article-list { margin: 10px 0; }
+        .article-item { padding: 10px; border: 1px solid #eee; margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h1>Test Articles DesaMedia</h1>
+    
+    <div class="test-section">
+        <h3>Data Artikel di LocalStorage</h3>
+        <div id="articlesData">Loading...</div>
+        <button onclick="loadArticlesData()">Refresh Data</button>
+        <button onclick="createTestArticle()">Buat Artikel Test</button>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test Fungsi viewArticle</h3>
+        <div id="testResults"></div>
+        <button onclick="testViewArticle()">Test viewArticle</button>
+        <button onclick="clearLocalStorage()">Clear LocalStorage</button>
+    </div>
+    
+    <div class="test-section">
+        <h3>Navigasi</h3>
+        <button onclick="goToHome()">Pergi ke Home</button>
+        <button onclick="goToDashboard()">Pergi ke Dashboard</button>
+        <button onclick="goToArticle()">Pergi ke Article Page</button>
+    </div>
+
+    <script>
+        function loadArticlesData() {
+            const articles = JSON.parse(localStorage.getItem('articles')) || [];
+            const container = document.getElementById('articlesData');
+            
+            let html = `<p><strong>Total Artikel:</strong> ${articles.length}</p>`;
+            html += `<p><strong>Published:</strong> ${articles.filter(a => a.status === 'published').length}</p>`;
+            html += `<p><strong>Draft:</strong> ${articles.filter(a => a.status === 'draft').length}</p>`;
+            
+            html += '<div class="article-list"><strong>Detail Artikel:</strong>';
+            articles.forEach(article => {
+                html += `
+                    <div class="article-item">
+                        <strong>ID:</strong> ${article.id}<br>
+                        <strong>Judul:</strong> ${article.title}<br>
+                        <strong>Status:</strong> ${article.status}<br>
+                        <strong>Penulis:</strong> ${article.author}<br>
+                        <strong>Views:</strong> ${article.views || 0}<br>
+                        <button onclick="testSpecificArticle('${article.id}')">Test Artikel Ini</button>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            container.innerHTML = html;
+        }
+
+        function testViewArticle() {
+            const articles = JSON.parse(localStorage.getItem('articles')) || [];
+            const publishedArticles = articles.filter(a => a.status === 'published');
+            
+            if (publishedArticles.length > 0) {
+                const testArticle = publishedArticles[0];
+                localStorage.setItem('currentArticle', testArticle.id);
+                console.log('Testing article:', testArticle);
+                
+                document.getElementById('testResults').innerHTML = `
+                    <p>Membuka artikel: <strong>${testArticle.title}</strong></p>
+                    <p>ID: ${testArticle.id}</p>
+                    <p>Status: ${testArticle.status}</p>
+                    <button onclick="window.open('article.html', '_blank')">Buka Article.html</button>
+                `;
+            } else {
+                document.getElementById('testResults').innerHTML = '<p>Tidak ada artikel published untuk testing</p>';
+            }
+        }
+
+        function testSpecificArticle(articleId) {
+            localStorage.setItem('currentArticle', articleId);
+            console.log('Testing specific article:', articleId);
+            
+            // Buka di tab baru
+            window.open('article.html', '_blank');
+        }
+
+        function createTestArticle() {
+            const articles = JSON.parse(localStorage.getItem('articles')) || [];
+            
+            const testArticle = {
+                id: 'test-' + Date.now(),
+                title: 'Artikel Test ' + new Date().toLocaleTimeString(),
+                category: 'Pemerintahan',
+                status: 'published',
+                image: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                content: 'Ini adalah artikel test untuk debugging. Artikel ini dibuat secara otomatis untuk testing fungsi viewArticle.',
+                tags: ['test', 'debug'],
+                author: 'system',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                views: 0
+            };
+            
+            articles.push(testArticle);
+            localStorage.setItem('articles', JSON.stringify(articles));
+            
+            alert('Artikel test dibuat!');
+            loadArticlesData();
+        }
+
+        function clearLocalStorage() {
+            if (confirm('Yakin ingin menghapus semua data?')) {
+                localStorage.clear();
+                alert('LocalStorage cleared!');
+                loadArticlesData();
+            }
+        }
+
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+
+        function goToDashboard() {
+            window.location.href = 'dashboard.html';
+        }
+
+        function goToArticle() {
+            window.location.href = 'article.html';
+        }
+
+        // Load data saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            loadArticlesData();
+        });
+    </script>
+</body>
+</html>

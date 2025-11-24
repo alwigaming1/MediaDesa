@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Penulis - DesaMedia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        .upload-area {
+            transition: all 0.3s ease;
+            border: 2px dashed #d1d5db;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+        .upload-area:hover {
+            border-color: var(--primary);
+            background-color: var(--light);
+        }
+        .upload-area.dragover {
+            border-color: var(--primary);
+            background-color: #e6fffa;
+        }
+        .editor-toolbar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            background: #f8fafc;
+            border-radius: 6px;
+            flex-wrap: wrap;
+        }
+        .editor-toolbar button {
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .editor-toolbar button:hover {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .char-counter {
+            text-align: right;
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+        .char-counter.warning { color: var(--accent); }
+        .char-counter.error { color: #dc2626; }
+        .tag-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .tag-suggestion {
+            background: var(--light);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .tag-suggestion:hover {
+            background: var(--primary);
+            color: white;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .btn-loading {
+            position: relative;
+            color: transparent;
+        }
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s ease infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">Desa<span>Media</span></div>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">P</div>
+                <div class="user-details">
+                    <h4 id="userName">Penulis</h4>
+                    <span class="user-role" id="userRole">Penulis</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="sidebar-nav">
+            <div class="nav-item active" data-section="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item" data-section="articles">
+                <i class="fas fa-newspaper"></i>
+                <span>Artikel Saya</span>
+            </div>
+            <div class="nav-item" data-section="new-article">
+                <i class="fas fa-edit"></i>
+                <span>Tulis Artikel Baru</span>
+            </div>
+            <div class="nav-item" data-section="profile">
+                <i class="fas fa-user"></i>
+                <span>Profil Saya</span>
+            </div>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Keluar</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1 id="pageTitle">Dashboard Penulis</h1>
+            <button class="btn" onclick="showNewArticleModal()">
+                <i class="fas fa-plus"></i> Artikel Baru
+            </button>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="totalArticles">0</h3>
+                    <p>Total Artikel</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="publishedArticles">0</h3>
+                    <p>Artikel Dipublikasi</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="draftArticles">0</h3>
+                    <p>Artikel Draft</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalViews">0</h3>
+                    <p>Total Dilihat</p>
+                </div>
+            </div>
+
+            <div class="articles-section">
+                <div class="section-header">
+                    <h2>Artikel Terbaru</h2>
+                </div>
+                <table class="articles-table">
+                    <thead>
+                        <tr>
+                            <th>Judul</th>
+                            <th>Kategori</th>
+                            <th>Status</th>
+                            <th>Tanggal</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentArticlesTable">
+                        <!-- Data akan diisi oleh JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Articles Section -->
+        <div id="articles-section" style="display: none;">
+            <div class="articles-section">
+                <div class="section-header">
+                    <h2>Semua Artikel Saya</h2>
+                </div>
+                <table class="articles-table">
+                    <thead>
+                        <tr>
+                            <th>Judul</th>
+                            <th>Kategori</th>
+                            <th>Status</th>
+                            <th>Tanggal</th>
+                            <th>Dilihat</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allArticlesTable">
+                        <!-- Data akan diisi oleh JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- New Article Section -->
+        <div id="new-article-section" style="display: none;">
+            <div class="articles-section">
+                <div class="section-header">
+                    <h2>Tulis Artikel Baru</h2>
+                </div>
+                <div class="modal-body">
+                    <form id="articleForm">
+                        <div class="form-group">
+                            <label class="form-label">Judul Artikel</label>
+                            <input type="text" class="form-input" id="articleTitle" required 
+                                   placeholder="Masukkan judul artikel yang menarik...">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Kategori</label>
+                                <select class="form-select" id="articleCategory" required>
+                                    <option value="">Pilih Kategori</option>
+                                    <option value="Pemerintahan">Pemerintahan</option>
+                                    <option value="Pertanian">Pertanian</option>
+                                    <option value="Kesehatan">Kesehatan</option>
+                                    <option value="Pendidikan">Pendidikan</option>
+                                    <option value="Ekonomi">Ekonomi</option>
+                                    <option value="Keamanan">Keamanan</option>
+                                    <option value="Pembangunan">Pembangunan</option>
+                                    <option value="Lingkungan">Lingkungan</option>
+                                    <option value="Sosial">Sosial</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Status</label>
+                                <select class="form-select" id="articleStatus">
+                                    <option value="draft">Draft</option>
+                                    <option value="published">Publikasi</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- UPLOAD GAMBAR LOKAL - FIXED -->
+                        <div class="form-group">
+                            <label class="form-label">Gambar Utama</label>
+                            
+                            <div class="upload-area" id="uploadArea" 
+                                 style="border: 2px dashed #d1d5db; padding: 2rem; text-align: center; border-radius: 8px; cursor: pointer; margin-bottom: 1rem; background: #f8fafc; transition: all 0.3s ease;">
+                                <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #9ca3af; margin-bottom: 0.5rem;"></i>
+                                <p style="margin: 0; color: #6b7280; font-weight: 500;">Klik untuk upload gambar</p>
+                                <small style="color: #9ca3af;">Format: JPG, PNG, GIF (Maks. 2MB)</small>
+                            </div>
+                            
+                            <input type="file" id="articleImageFile" accept="image/*" style="display: none;">
+                            
+                            <div id="imagePreview" style="display: none; margin-top: 1rem; padding: 1rem; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc;">
+                                <p style="margin-bottom: 0.5rem; font-weight: 500; color: #374151;">Preview Gambar:</p>
+                                <img id="previewImg" style="max-width: 100%; max-height: 300px; border-radius: 6px; display: block; margin: 0 auto;">
+                                <button type="button" onclick="ImageUploader.clearImagePreview('article')" 
+                                        style="margin-top: 0.75rem; padding: 0.5rem 1rem; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.875rem;">
+                                    <i class="fas fa-trash"></i> Hapus Gambar
+                                </button>
+                            </div>
+                            
+                            <div style="margin-top: 0.5rem;">
+                                <small style="color: #6b7280;">
+                                    <strong>Tips:</strong> Ukuran gambar disarankan 1200x630 pixel untuk tampilan optimal
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <!-- EDITOR KONTEN YANG DITINGKATKAN -->
+                        <div class="form-group">
+                            <label class="form-label">Konten Artikel</label>
+                            
+                            <!-- Toolbar Editor Sederhana -->
+                            <div class="editor-toolbar">
+                                <button type="button" id="boldBtn" title="Teks Tebal">
+                                    <strong>B</strong>
+                                </button>
+                                <button type="button" id="italicBtn" title="Teks Miring">
+                                    <em>I</em>
+                                </button>
+                                <button type="button" id="underlineBtn" title="Garis Bawah">
+                                    <u>U</u>
+                                </button>
+                                <button type="button" id="linkBtn" title="Tambah Link">
+                                    <i class="fas fa-link"></i>
+                                </button>
+                                <button type="button" id="listBtn" title="List Item">
+                                    <i class="fas fa-list"></i>
+                                </button>
+                                <button type="button" id="quoteBtn" title="Kutipan">
+                                    <i class="fas fa-quote-right"></i>
+                                </button>
+                            </div>
+                            
+                            <textarea class="form-textarea" id="articleContent" required 
+                                      placeholder="Tulis konten artikel Anda di sini...&#10;&#10;Anda bisa menggunakan format sederhana:&#10;**teks tebal**&#10;_teks miring_&#10;[link teks](https://contoh.com)&#10;- item list&#10;&gt; kutipan"
+                                      style="min-height: 400px; font-family: 'Inter', sans-serif; line-height: 1.6;"></textarea>
+                            
+                            <div class="char-counter" id="charCounter">0 karakter</div>
+                            
+                            <div style="margin-top: 0.5rem; font-size: 0.875rem; color: #6b7280;">
+                                <p><strong>Format yang didukung:</strong></p>
+                                <ul style="margin: 0.25rem 0; padding-left: 1.5rem;">
+                                    <li><strong>**teks tebal**</strong> → <strong>teks tebal</strong></li>
+                                    <li><em>_teks miring_</em> → <em>teks miring</em></li>
+                                    <li><u>&lt;u&gt;garis bawah&lt;/u&gt;</u> → <u>garis bawah</u></li>
+                                    <li>[teks link](https://...) → <a href="#">teks link</a></li>
+                                    <li>- item list → • item list</li>
+                                    <li>> kutipan → <blockquote style="margin: 0.5rem 0; padding-left: 1rem; border-left: 3px solid #d1d5db; color: #6b7280;">kutipan</blockquote></li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Tag (pisahkan dengan koma)</label>
+                            <input type="text" class="form-input" id="articleTags" 
+                                   placeholder="contoh: Desa, Pembangunan, Ekonomi, Pertanian">
+                            <div class="tag-suggestions">
+                                <div class="tag-suggestion" onclick="addTag('Desa')">Desa</div>
+                                <div class="tag-suggestion" onclick="addTag('Pembangunan')">Pembangunan</div>
+                                <div class="tag-suggestion" onclick="addTag('Ekonomi')">Ekonomi</div>
+                                <div class="tag-suggestion" onclick="addTag('Pertanian')">Pertanian</div>
+                                <div class="tag-suggestion" onclick="addTag('Kesehatan')">Kesehatan</div>
+                                <div class="tag-suggestion" onclick="addTag('Pendidikan')">Pendidikan</div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button type="submit" class="btn" id="submitBtn">
+                                <i class="fas fa-save"></i> Simpan Artikel
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div id="profile-section" style="display: none;">
+            <div class="articles-section">
+                <div class="section-header">
+                    <h2>Profil Saya</h2>
+                </div>
+                <div class="modal-body">
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label class="form-label">Nama Lengkap</label>
+                            <input type="text" class="form-input" id="profileName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" id="profileEmail" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Bio</label>
+                            <textarea class="form-textarea" id="profileBio" placeholder="Tulis bio singkat tentang Anda..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Foto Profil (URL)</label>
+                            <input type="url" class="form-input" id="profilePhoto" placeholder="https://example.com/photo.jpg">
+                        </div>
+                        
+                        <div class="form-group">
+                            <button type="submit" class="btn">Update Profil</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Article Modal -->
+    <div class="modal" id="newArticleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Tulis Artikel Baru</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="modalArticleForm">
+                    <div class="form-group">
+                        <label class="form-label">Judul Artikel</label>
+                        <input type="text" class="form-input" id="modalArticleTitle" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Kategori</label>
+                            <select class="form-select" id="modalArticleCategory" required>
+                                <option value="">Pilih Kategori</option>
+                                <option value="Pemerintahan">Pemerintahan</option>
+                                <option value="Pertanian">Pertanian</option>
+                                <option value="Kesehatan">Kesehatan</option>
+                                <option value="Pendidikan">Pendidikan</option>
+                                <option value="Ekonomi">Ekonomi</option>
+                                <option value="Keamanan">Keamanan</option>
+                                <option value="Pembangunan">Pembangunan</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" id="modalArticleStatus">
+                                <option value="draft">Draft</option>
+                                <option value="published">Publikasi</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Gambar Utama (URL)</label>
+                        <input type="url" class="form-input" id="modalArticleImage" placeholder="https://example.com/image.jpg">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Konten Artikel</label>
+                        <textarea class="form-textarea" id="modalArticleContent" required placeholder="Tulis konten artikel Anda di sini..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Tag (pisahkan dengan koma)</label>
+                        <input type="text" class="form-input" id="modalArticleTags" placeholder="contoh: Desa, Pembangunan, Ekonomi">
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn">Simpan Artikel</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tambahkan sebelum script lainnya -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/image-upload.js"></script>
+    <script src="js/article-editor.js"></script>
+    <script src="js/dashboard.js"></script>
+    
+    <script>
+    // Enhanced upload area functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Dashboard HTML loaded, initializing upload area...');
+        
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('articleImageFile');
+        
+        if (uploadArea && fileInput) {
+            console.log('Upload area elements found, setting up event listeners...');
+            
+            // Click to upload
+            uploadArea.addEventListener('click', () => {
+                console.log('Upload area clicked');
+                fileInput.click();
+            });
+            
+            // Drag and drop
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                if (e.dataTransfer.files.length) {
+                    console.log('File dropped:', e.dataTransfer.files[0].name);
+                    fileInput.files = e.dataTransfer.files;
+                    const event = new Event('change');
+                    fileInput.dispatchEvent(event);
+                }
+            });
+        } else {
+            console.error('Upload area or file input not found!');
+        }
+
+        // Character counter
+        const contentTextarea = document.getElementById('articleContent');
+        const charCounter = document.getElementById('charCounter');
+        
+        if (contentTextarea && charCounter) {
+            contentTextarea.addEventListener('input', function() {
+                const length = this.value.length;
+                charCounter.textContent = `${length} karakter`;
+                
+                if (length > 5000) {
+                    charCounter.classList.add('warning');
+                } else {
+                    charCounter.classList.remove('warning');
+                }
+                
+                if (length > 10000) {
+                    charCounter.classList.add('error');
+                } else {
+                    charCounter.classList.remove('error');
+                }
+            });
+        }
+
+        // Loading state untuk submit button
+        const articleForm = document.getElementById('articleForm');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        if (articleForm && submitBtn) {
+            articleForm.addEventListener('submit', function() {
+                console.log('Form submission detected, adding loading state...');
+                submitBtn.classList.add('btn-loading');
+                submitBtn.disabled = true;
+                
+                // Reset loading state setelah 3 detik (fallback)
+                setTimeout(() => {
+                    if (submitBtn.classList.contains('btn-loading')) {
+                        console.log('Fallback: Removing loading state after timeout');
+                        submitBtn.classList.remove('btn-loading');
+                        submitBtn.disabled = false;
+                    }
+                }, 3000);
+            });
+        }
+        
+        console.log('Dashboard HTML initialization complete');
+    });
+
+    function addTag(tag) {
+        console.log('Adding tag:', tag);
+        const tagsInput = document.getElementById('articleTags');
+        if (!tagsInput) {
+            console.error('Tags input not found!');
+            return;
+        }
+        
+        const currentTags = tagsInput.value.split(',').map(t => t.trim()).filter(t => t);
+        
+        if (!currentTags.includes(tag)) {
+            if (currentTags.length > 0) {
+                tagsInput.value = currentTags.join(', ') + ', ' + tag;
+            } else {
+                tagsInput.value = tag;
+            }
+            console.log('Tag added, current tags:', tagsInput.value);
+        } else {
+            console.log('Tag already exists, skipping...');
+        }
+        
+        tagsInput.focus();
+    }
+    
+    // Debug script untuk melacak auth state
+    console.log('=== DASHBOARD AUTH DEBUG ===');
+    console.log('Current URL:', window.location.href);
+    console.log('Firebase Auth:', typeof auth);
+    console.log('Current User:', auth?.currentUser);
+    console.log('LocalStorage User:', localStorage.getItem('currentUser'));
+
+    // Monitor auth state changes
+    if (typeof auth !== 'undefined') {
+        auth.onAuthStateChanged((user) => {
+            console.log('🔐 Auth State Changed:', user ? `User: ${user.email}` : 'No user');
+            console.log('🔐 Current Path:', window.location.pathname);
+        });
+    }
+    </script>
+</body>
+</html>

@@ -157,7 +157,6 @@
                     <h3 class="footer-title">Tautan Cepat</h3>
                     <ul class="footer-links">
                         <li><a href="index.html">Beranda</a></li>
-                        <li><a href="login.html">Area Penulis</a></li>
                         <li><a href="#">Tentang Kami</a></li>
                         <li><a href="#">Kontak</a></li>
                     </ul>
@@ -173,35 +172,18 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2023 DesaMedia. All rights reserved.</p>
+                <p>&copy; 2025 DesaMedia | Developed By Muh Alwi Syahrir</p>
             </div>
         </div>
     </footer>
-    <!-- Tambahkan sebelum script lainnya -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
-<script src="js/firebase-config.js"></script>
+
+    <!-- Firebase & Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
     <script src="js/main.js"></script>
-    <script>
-    // Debugging script
-    console.log('=== DEBUG INFO ===');
-    console.log('Total articles:', articles ? articles.length : 0);
-    console.log('Published articles:', articles ? articles.filter(a => a.status === 'published').length : 0);
-    
-    // Test function
-    function testArticleClick(articleId) {
-        console.log('Testing article click:', articleId);
-        viewArticle(articleId);
-    }
-    
-    // Log semua published articles
-    if (articles) {
-        const published = articles.filter(a => a.status === 'published');
-        console.log('Published articles:', published.map(a => ({ id: a.id, title: a.title })));
-    }
-</script>
-<script src="js/utils.js"></script>
+    <script src="js/utils.js"></script>
 </body>
 </html>

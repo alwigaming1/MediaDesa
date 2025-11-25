@@ -65,7 +65,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         loadBreakingNews();
         loadCategories();
         setupEventListeners();
-        addAuthorButton();
         setupAutoRefresh();
         initializeSearch();
         
@@ -215,7 +214,6 @@ function updateFeaturedNews(articles) {
                 <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
                     <h3>Belum ada artikel</h3>
                     <p>Artikel yang dipublikasi akan muncul di sini</p>
-                    <a href="login.html" class="btn" style="margin-top: 1rem;">Login untuk Menulis</a>
                 </div>
             `;
             return;
@@ -274,10 +272,13 @@ function updateLatestNews(articles) {
     }
 }
 
+// PERBAIKAN: Fungsi updatePopularNews yang benar-benar terhubung dengan Firebase
 function updatePopularNews(articles) {
     try {
         const popularContainer = document.getElementById('popularNews');
         if (!popularContainer) return;
+        
+        console.log('Memperbarui berita populer dengan', articles.length, 'artikel');
         
         // Sort by views (or by date if no views)
         const popularArticles = [...articles]
@@ -302,6 +303,8 @@ function updatePopularNews(articles) {
                 </div>
             </div>
         `).join('');
+        
+        console.log('Berita populer berhasil diperbarui:', popularArticles.length, 'artikel');
     } catch (error) {
         console.error('Error updating popular news:', error);
     }
@@ -599,37 +602,73 @@ function filterByCategory(category) {
     }
 }
 
-// Enhanced setupEventListeners
+// PERBAIKAN UTAMA: Enhanced setupEventListeners dengan perbaikan mobile menu
 function setupEventListeners() {
     try {
-        // Mobile menu toggle
+        // Mobile menu toggle - PERBAIKAN UTAMA
         const mobileMenu = document.querySelector('.mobile-menu');
         const nav = document.querySelector('nav ul');
+        const headerMain = document.querySelector('.header-main');
         
-        if (mobileMenu && nav) {
-            mobileMenu.addEventListener('click', function() {
-                if (nav.style.display === 'flex') {
-                    nav.style.display = 'none';
-                } else {
+        if (mobileMenu && nav && headerMain) {
+            console.log('Mengatur event listener untuk mobile menu...');
+            
+            // Pastikan nav disembunyikan di mobile pertama kali dan posisinya benar
+            if (window.innerWidth <= 768) {
+                nav.style.display = 'none';
+                // Pastikan headerMain memiliki position relative untuk positioning absolute child
+                headerMain.style.position = 'relative';
+            }
+            
+            mobileMenu.addEventListener('click', function(e) {
+                e.stopPropagation();
+                console.log('Mobile menu diklik - status saat ini:', nav.style.display);
+                
+               if (nav.style.display === 'flex' || nav.style.display === 'block') {
+                        nav.style.display = 'none';
+                        mobileMenu.innerHTML = '☰';
+                    } else {
+                        nav.style.display = 'block';
+                        nav.style.position = 'absolute';
+                        nav.style.top = '90%';
+                        nav.style.left = '0';
+                        nav.style.right = '0';
+                        nav.style.width = '100%';
+                        nav.style.backgroundColor = 'white';
+                        nav.style.padding = '1rem 0';
+                        nav.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+                        nav.style.zIndex = '1000';
+                        nav.style.borderTop = '1px solid #e2e8f0';
+                        mobileMenu.innerHTML = '✕';
+                    }
+                });
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('nav') && !e.target.closest('.mobile-menu')) {
+                    if (window.innerWidth <= 768) {
+                        nav.style.display = 'none';
+                        mobileMenu.innerHTML = '☰';
+                    }
+                }
+            });
+
+            // Close menu when window is resized to desktop size
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
                     nav.style.display = 'flex';
-                    nav.style.flexDirection = 'column';
-                    nav.style.position = 'absolute';
-                    nav.style.top = '100%';
-                    nav.style.left = '0';
-                    nav.style.width = '100%';
-                    nav.style.backgroundColor = 'var(--white)';
-                    nav.style.padding = '1rem 0';
-                    nav.style.boxShadow = '0 5px 10px rgba(0,0,0,0.1)';
+                    nav.style.position = 'static';
+                    nav.style.backgroundColor = 'transparent';
+                    nav.style.padding = '0';
+                    nav.style.boxShadow = 'none';
+                    nav.style.borderTop = 'none';
+                    mobileMenu.innerHTML = '☰';
+                    headerMain.style.position = 'static';
+                } else {
+                    nav.style.display = 'none';
+                    headerMain.style.position = 'relative';
                 }
             });
         }
-        
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('nav') && !e.target.closest('.mobile-menu')) {
-                if (nav) nav.style.display = 'none';
-            }
-        });
         
         // Category navigation
         document.querySelectorAll('nav a[data-category]').forEach(link => {
@@ -657,22 +696,6 @@ function setupEventListeners() {
         }
     } catch (error) {
         console.error('Error setting up event listeners:', error);
-    }
-}
-
-function addAuthorButton() {
-    try {
-        const headerActions = document.querySelector('.header-actions');
-        if (headerActions && !document.querySelector('.author-area-btn')) {
-            const loginBtn = document.createElement('a');
-            loginBtn.href = 'login.html';
-            loginBtn.className = 'btn btn-outline author-area-btn';
-            loginBtn.innerHTML = '<i class="fas fa-pen"></i> Area Penulis';
-            loginBtn.style.marginRight = '1rem';
-            headerActions.insertBefore(loginBtn, headerActions.firstChild);
-        }
-    } catch (error) {
-        console.error('Error adding author button:', error);
     }
 }
 

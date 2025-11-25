@@ -10,6 +10,247 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <style>
+        /* Loading overlay styles */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #1a365d;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        
+        .loading-text {
+            font-size: 1.1rem;
+            color: #1a365d;
+            font-weight: 500;
+        }
+        
+        .error-message {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #e53e3e;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #718096;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #cbd5e0;
+        }
+        
+        .refresh-btn {
+            background: #1a365d;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .refresh-btn:hover {
+            background: #2d4a80;
+        }
+        
+        /* Editor WYSIWYG Styles */
+        .editor-container {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            background: white;
+        }
+        
+        .editor-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+            padding: 0.75rem;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            align-items: center;
+        }
+        
+        .toolbar-group {
+            display: flex;
+            gap: 0.25rem;
+            padding-right: 0.75rem;
+            border-right: 1px solid #e2e8f0;
+            margin-right: 0.75rem;
+            align-items: center;
+        }
+        
+        .toolbar-group:last-child {
+            border-right: none;
+            margin-right: 0;
+        }
+        
+        .toolbar-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+        }
+        
+        .toolbar-btn:hover {
+            background: #1a365d;
+            color: white;
+            border-color: #1a365d;
+        }
+        
+        .toolbar-btn.active {
+            background: #1a365d;
+            color: white;
+            border-color: #1a365d;
+        }
+        
+        .toolbar-select {
+            padding: 0.25rem 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            background: white;
+            font-size: 0.875rem;
+            height: 36px;
+        }
+        
+        .toolbar-color {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .editor-content {
+            min-height: 400px;
+            padding: 1rem;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            outline: none;
+            background: white;
+        }
+        
+        .editor-content:empty:before {
+            content: attr(data-placeholder);
+            color: #9ca3af;
+        }
+        
+        .editor-content h1, .editor-content h2, .editor-content h3, .editor-content h4, .editor-content h5, .editor-content h6 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #1a202c;
+            font-weight: 600;
+        }
+        
+        .editor-content h1 { font-size: 1.75rem; }
+        .editor-content h2 { font-size: 1.5rem; }
+        .editor-content h3 { font-size: 1.25rem; }
+        .editor-content h4 { font-size: 1.125rem; }
+        .editor-content h5 { font-size: 1rem; }
+        .editor-content h6 { font-size: 0.875rem; }
+        
+        .editor-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .editor-content ul, .editor-content ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+        
+        .editor-content ul { list-style-type: disc; }
+        .editor-content ol { list-style-type: decimal; }
+        
+        .editor-content blockquote {
+            border-left: 4px solid #1a365d;
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: #4a5568;
+            font-style: italic;
+            background: #f7fafc;
+            padding: 1rem;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .editor-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin: 1rem 0;
+        }
+        
+        .editor-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        .editor-content table, .editor-content th, .editor-content td {
+            border: 1px solid #e2e8f0;
+        }
+        
+        .editor-content th, .editor-content td {
+            padding: 0.5rem;
+            text-align: left;
+        }
+        
+        .editor-content th {
+            background: #f7fafc;
+            font-weight: 600;
+        }
+        
+        .editor-content a {
+            color: #1a365d;
+            text-decoration: underline;
+        }
+        
+        .editor-content .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .editor-content .checklist-item input[type="checkbox"] {
+            margin: 0;
+        }
+
+        /* Upload area styles */
         .upload-area {
             transition: all 0.3s ease;
             border: 2px dashed #d1d5db;
@@ -18,70 +259,59 @@
             border-radius: 8px;
             cursor: pointer;
             margin-bottom: 1rem;
+            background: #f8fafc;
         }
+        
         .upload-area:hover {
-            border-color: var(--primary);
-            background-color: var(--light);
+            border-color: #1a365d;
+            background-color: #f0f4f8;
         }
+        
         .upload-area.dragover {
-            border-color: var(--primary);
+            border-color: #1a365d;
             background-color: #e6fffa;
         }
-        .editor-toolbar {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-            padding: 0.5rem;
-            background: #f8fafc;
-            border-radius: 6px;
-            flex-wrap: wrap;
-        }
-        .editor-toolbar button {
-            padding: 0.5rem;
-            border: 1px solid #d1d5db;
-            background: white;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .editor-toolbar button:hover {
-            background-color: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
+        
         .char-counter {
             text-align: right;
             font-size: 0.75rem;
-            color: var(--gray);
+            color: #718096;
             margin-top: 0.25rem;
         }
-        .char-counter.warning { color: var(--accent); }
+        
+        .char-counter.warning { color: #e53e3e; }
         .char-counter.error { color: #dc2626; }
+        
         .tag-suggestions {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
             margin-top: 0.5rem;
         }
+        
         .tag-suggestion {
-            background: var(--light);
+            background: #f7fafc;
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
             font-size: 0.75rem;
             cursor: pointer;
             transition: all 0.2s ease;
         }
+        
         .tag-suggestion:hover {
-            background: var(--primary);
+            background: #1a365d;
             color: white;
         }
+        
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        
         .btn-loading {
             position: relative;
             color: transparent;
         }
+        
         .btn-loading::after {
             content: '';
             position: absolute;
@@ -96,11 +326,146 @@
             border-top-color: transparent;
             animation: spin 0.8s ease infinite;
         }
+
+        /* Modal untuk insert gambar dan link */
+        .editor-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .editor-modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            padding: 1.5rem;
+        }
+        
+        .editor-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .editor-modal-body {
+            margin-bottom: 1rem;
+        }
+        
+        .editor-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        /* Profile photo preview */
+        .profile-photo-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 3px solid #1a365d;
+            margin: 1rem auto;
+            display: none;
+            position: relative;
+        }
+
+        .profile-photo-preview.show {
+            display: block;
+        }
+
+        .profile-photo-preview::after {
+            content: 'Preview';
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a365d;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        /* Responsive design untuk editor */
+        @media (max-width: 768px) {
+            .editor-toolbar {
+                justify-content: center;
+                gap: 0.5rem;
+            }
+            
+            .toolbar-group {
+                margin-right: 0.5rem;
+                padding-right: 0.5rem;
+            }
+            
+            .toolbar-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 0.75rem;
+            }
+            
+            .toolbar-select {
+                font-size: 0.75rem;
+                padding: 0.2rem 0.4rem;
+            }
+            
+            .editor-content {
+                min-height: 300px;
+                padding: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .editor-toolbar {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.75rem;
+            }
+            
+            .toolbar-group {
+                border-right: none;
+                margin-right: 0;
+                padding-right: 0;
+                justify-content: center;
+            }
+            
+            .editor-content {
+                min-height: 250px;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loadingText">Memuat Dashboard...</div>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">Desa<span>Media</span></div>
             <div class="user-info">
@@ -137,11 +502,14 @@
     </div>
 
     <!-- Main Content -->
-    <div class="main-content">
+    <div class="main-content" id="mainContent">
+        <!-- Error Message Area -->
+        <div id="errorMessage" style="display: none;"></div>
+
         <div class="header">
             <h1 id="pageTitle">Dashboard Penulis</h1>
-            <button class="btn" onclick="showNewArticleModal()">
-                <i class="fas fa-plus"></i> Artikel Baru
+            <button class="btn" onclick="showNewArticleSection()">
+                <i class="fas fa-plus"></i> <span class="btn-text">Artikel Baru</span>
             </button>
         </div>
 
@@ -170,20 +538,28 @@
                 <div class="section-header">
                     <h2>Artikel Terbaru</h2>
                 </div>
-                <table class="articles-table">
-                    <thead>
-                        <tr>
-                            <th>Judul</th>
-                            <th>Kategori</th>
-                            <th>Status</th>
-                            <th>Tanggal</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="recentArticlesTable">
-                        <!-- Data akan diisi oleh JavaScript -->
-                    </tbody>
-                </table>
+                <div class="table-container">
+                    <table class="articles-table">
+                        <thead>
+                            <tr>
+                                <th>Judul</th>
+                                <th>Kategori</th>
+                                <th>Status</th>
+                                <th>Tanggal</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentArticlesTable">
+                            <!-- Data akan diisi oleh JavaScript -->
+                            <tr>
+                                <td colspan="5" class="empty-state">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    <p>Memuat artikel...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -193,25 +569,33 @@
                 <div class="section-header">
                     <h2>Semua Artikel Saya</h2>
                 </div>
-                <table class="articles-table">
-                    <thead>
-                        <tr>
-                            <th>Judul</th>
-                            <th>Kategori</th>
-                            <th>Status</th>
-                            <th>Tanggal</th>
-                            <th>Dilihat</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="allArticlesTable">
-                        <!-- Data akan diisi oleh JavaScript -->
-                    </tbody>
-                </table>
+                <div class="table-container">
+                    <table class="articles-table">
+                        <thead>
+                            <tr>
+                                <th>Judul</th>
+                                <th>Kategori</th>
+                                <th>Status</th>
+                                <th>Tanggal</th>
+                                <th>Dilihat</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allArticlesTable">
+                            <!-- Data akan diisi oleh JavaScript -->
+                            <tr>
+                                <td colspan="6" class="empty-state">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    <p>Memuat artikel...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <!-- New Article Section -->
+        <!-- New Article Section dengan Editor WYSIWYG -->
         <div id="new-article-section" style="display: none;">
             <div class="articles-section">
                 <div class="section-header">
@@ -251,12 +635,11 @@
                             </div>
                         </div>
                         
-                        <!-- UPLOAD GAMBAR LOKAL - FIXED -->
+                        <!-- UPLOAD GAMBAR UTAMA -->
                         <div class="form-group">
                             <label class="form-label">Gambar Utama</label>
                             
-                            <div class="upload-area" id="uploadArea" 
-                                 style="border: 2px dashed #d1d5db; padding: 2rem; text-align: center; border-radius: 8px; cursor: pointer; margin-bottom: 1rem; background: #f8fafc; transition: all 0.3s ease;">
+                            <div class="upload-area" id="uploadArea">
                                 <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #9ca3af; margin-bottom: 0.5rem;"></i>
                                 <p style="margin: 0; color: #6b7280; font-weight: 500;">Klik untuk upload gambar</p>
                                 <small style="color: #9ca3af;">Format: JPG, PNG, GIF (Maks. 2MB)</small>
@@ -267,7 +650,7 @@
                             <div id="imagePreview" style="display: none; margin-top: 1rem; padding: 1rem; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc;">
                                 <p style="margin-bottom: 0.5rem; font-weight: 500; color: #374151;">Preview Gambar:</p>
                                 <img id="previewImg" style="max-width: 100%; max-height: 300px; border-radius: 6px; display: block; margin: 0 auto;">
-                                <button type="button" onclick="ImageUploader.clearImagePreview('article')" 
+                                <button type="button" onclick="clearImagePreview()" 
                                         style="margin-top: 0.75rem; padding: 0.5rem 1rem; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.875rem;">
                                     <i class="fas fa-trash"></i> Hapus Gambar
                                 </button>
@@ -280,48 +663,115 @@
                             </div>
                         </div>
                         
-                        <!-- EDITOR KONTEN YANG DITINGKATKAN -->
+                        <!-- EDITOR WYSIWYG LENGKAP -->
                         <div class="form-group">
                             <label class="form-label">Konten Artikel</label>
                             
-                            <!-- Toolbar Editor Sederhana -->
-                            <div class="editor-toolbar">
-                                <button type="button" id="boldBtn" title="Teks Tebal">
-                                    <strong>B</strong>
-                                </button>
-                                <button type="button" id="italicBtn" title="Teks Miring">
-                                    <em>I</em>
-                                </button>
-                                <button type="button" id="underlineBtn" title="Garis Bawah">
-                                    <u>U</u>
-                                </button>
-                                <button type="button" id="linkBtn" title="Tambah Link">
-                                    <i class="fas fa-link"></i>
-                                </button>
-                                <button type="button" id="listBtn" title="List Item">
-                                    <i class="fas fa-list"></i>
-                                </button>
-                                <button type="button" id="quoteBtn" title="Kutipan">
-                                    <i class="fas fa-quote-right"></i>
-                                </button>
+                            <div class="editor-container">
+                                <!-- Toolbar Editor Lengkap -->
+                                <div class="editor-toolbar" id="editorToolbar">
+                                    <!-- Format Teks -->
+                                    <div class="toolbar-group">
+                                        <button type="button" class="toolbar-btn" data-command="bold" title="Tebal (Ctrl+B)">
+                                            <i class="fas fa-bold"></i>
+                                        </button>
+                                        <button type="button" class="toolbar-btn" data-command="italic" title="Miring (Ctrl+I)">
+                                            <i class="fas fa-italic"></i>
+                                        </button>
+                                        <button type="button" class="toolbar-btn" data-command="underline" title="Garis Bawah (Ctrl+U)">
+                                            <i class="fas fa-underline"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Alignment -->
+                                    <div class="toolbar-group">
+                                        <button type="button" class="toolbar-btn" data-command="justifyLeft" title="Rata Kiri">
+                                            <i class="fas fa-align-left"></i>
+                                        </button>
+                                        <button type="button" class="toolbar-btn" data-command="justifyCenter" title="Rata Tengah">
+                                            <i class="fas fa-align-center"></i>
+                                        </button>
+                                        <button type="button" class="toolbar-btn" data-command="justifyRight" title="Rata Kanan">
+                                            <i class="fas fa-align-right"></i>
+                                        </button>
+                                        <button type="button" class="toolbar-btn" data-command="justifyFull" title="Rata Kiri-Kanan">
+                                            <i class="fas fa-align-justify"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Heading & Font Size -->
+                                    <div class="toolbar-group">
+                                        <select class="toolbar-select" id="formatBlock">
+                                            <option value="p">Paragraf</option>
+                                            <option value="h1">Heading 1</option>
+                                            <option value="h2">Heading 2</option>
+                                            <option value="h3">Heading 3</option>
+                                            <option value="h4">Heading 4</option>
+                                            <option value="h5">Heading 5</option>
+                                            <option value="h6">Heading 6</option>
+                                        </select>
+                                        <select class="toolbar-select" id="fontSize">
+                                            <option value="1">Kecil</option>
+                                            <option value="2">Sedang</option>
+                                            <option value="3" selected>Normal</option>
+                                            <option value="4">Agak Besar</option>
+                                            <option value="5">Besar</option>
+                                            <option value="6">Sangat Besar</option>
+                                            <option value="7">Terbesar</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- List -->
+                                    <div class="toolbar-group">
+                                        <button type="button" class="toolbar-btn" data-command="insertUnorderedList" title="Daftar Bullet">
+                                            <i class="fas fa-list-ul"></i>
+                                        </button>
+                                        <button type="button" class="toolbar-btn" data-command="insertOrderedList" title="Daftar Nomor">
+                                            <i class="fas fa-list-ol"></i>
+                                        </button>
+                                        <button type="button" class="toolbar-btn" id="checklistBtn" title="Daftar Checklist">
+                                            <i class="fas fa-tasks"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Insert -->
+                                    <div class="toolbar-group">
+                                        <button type="button" class="toolbar-btn" id="insertLinkBtn" title="Sisipkan Link">
+                                            <i class="fas fa-link"></i>
+                                        </button>
+                                        <button type="button" class="toolbar-btn" id="insertImageBtn" title="Sisipkan Gambar">
+                                            <i class="fas fa-image"></i>
+                                        </button>
+                                        <button type="button" class="toolbar-btn" data-command="formatBlock" data-value="blockquote" title="Kutipan">
+                                            <i class="fas fa-quote-right"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Undo/Redo -->
+                                    <div class="toolbar-group">
+                                        <button type="button" class="toolbar-btn" data-command="undo" title="Undo (Ctrl+Z)">
+                                            <i class="fas fa-undo"></i>
+                                        </button>
+                                        <button type="button" class="toolbar-btn" data-command="redo" title="Redo (Ctrl+Y)">
+                                            <i class="fas fa-redo"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Warna -->
+                                    <div class="toolbar-group">
+                                        <input type="color" id="textColor" class="toolbar-color" title="Warna Teks" value="#000000">
+                                        <input type="color" id="backgroundColor" class="toolbar-color" title="Warna Latar" value="#ffffff">
+                                    </div>
+                                </div>
+                                
+                                <!-- Area Konten Editor -->
+                                <div class="editor-content" id="articleContent" contenteditable="true" data-placeholder="Tulis konten artikel Anda di sini..."></div>
                             </div>
-                            
-                            <textarea class="form-textarea" id="articleContent" required 
-                                      placeholder="Tulis konten artikel Anda di sini...&#10;&#10;Anda bisa menggunakan format sederhana:&#10;**teks tebal**&#10;_teks miring_&#10;[link teks](https://contoh.com)&#10;- item list&#10;&gt; kutipan"
-                                      style="min-height: 400px; font-family: 'Inter', sans-serif; line-height: 1.6;"></textarea>
                             
                             <div class="char-counter" id="charCounter">0 karakter</div>
                             
                             <div style="margin-top: 0.5rem; font-size: 0.875rem; color: #6b7280;">
-                                <p><strong>Format yang didukung:</strong></p>
-                                <ul style="margin: 0.25rem 0; padding-left: 1.5rem;">
-                                    <li><strong>**teks tebal**</strong> → <strong>teks tebal</strong></li>
-                                    <li><em>_teks miring_</em> → <em>teks miring</em></li>
-                                    <li><u>&lt;u&gt;garis bawah&lt;/u&gt;</u> → <u>garis bawah</u></li>
-                                    <li>[teks link](https://...) → <a href="#">teks link</a></li>
-                                    <li>- item list → • item list</li>
-                                    <li>> kutipan → <blockquote style="margin: 0.5rem 0; padding-left: 1rem; border-left: 3px solid #d1d5db; color: #6b7280;">kutipan</blockquote></li>
-                                </ul>
+                                <p><strong>Tips Editor:</strong> Gunakan toolbar di atas untuk memformat teks. Anda dapat menyisipkan gambar, link, dan berbagai jenis daftar. Gunakan shortcut keyboard untuk mempercepat pekerjaan.</p>
                             </div>
                         </div>
                         
@@ -341,10 +791,10 @@
                         
                         <div class="form-group">
                             <button type="submit" class="btn" id="submitBtn">
-                                <i class="fas fa-save"></i> Simpan Artikel
+                                <i class="fas fa-save"></i> <span class="btn-text">Simpan Artikel</span>
                             </button>
                             <button type="button" class="btn btn-secondary" onclick="resetForm()">
-                                <i class="fas fa-redo"></i> Reset
+                                <i class="fas fa-redo"></i> <span class="btn-text">Reset</span>
                             </button>
                         </div>
                     </form>
@@ -362,26 +812,37 @@
                     <form id="profileForm">
                         <div class="form-group">
                             <label class="form-label">Nama Lengkap</label>
-                            <input type="text" class="form-input" id="profileName" required>
+                            <input type="text" class="form-input" id="profileName" required placeholder="Masukkan nama lengkap Anda">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-input" id="profileUsername" required placeholder="Username untuk tampilan di artikel">
+                            <small style="color: #6b7280;">Username ini akan ditampilkan sebagai penulis artikel</small>
                         </div>
                         
                         <div class="form-group">
                             <label class="form-label">Email</label>
-                            <input type="email" class="form-input" id="profileEmail" required>
+                            <input type="email" class="form-input" id="profileEmail" required placeholder="email@contoh.com">
                         </div>
                         
                         <div class="form-group">
                             <label class="form-label">Bio</label>
-                            <textarea class="form-textarea" id="profileBio" placeholder="Tulis bio singkat tentang Anda..."></textarea>
+                            <textarea class="form-textarea" id="profileBio" placeholder="Tulis bio singkat tentang Anda..." style="min-height: 120px;"></textarea>
                         </div>
                         
                         <div class="form-group">
                             <label class="form-label">Foto Profil (URL)</label>
                             <input type="url" class="form-input" id="profilePhoto" placeholder="https://example.com/photo.jpg">
+                            <small style="color: #6b7280;">Masukkan URL gambar untuk foto profil Anda</small>
+                            
+                            <div class="profile-photo-preview" id="profilePhotoPreview"></div>
                         </div>
                         
                         <div class="form-group">
-                            <button type="submit" class="btn">Update Profil</button>
+                            <button type="submit" class="btn">
+                                <i class="fas fa-save"></i> <span class="btn-text">Update Profil</span>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -389,90 +850,576 @@
         </div>
     </div>
 
-    <!-- New Article Modal -->
-    <div class="modal" id="newArticleModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Tulis Artikel Baru</h3>
-                <button class="close-btn" onclick="closeModal()">&times;</button>
+    <!-- Modal untuk Insert Link -->
+    <div class="editor-modal" id="insertLinkModal">
+        <div class="editor-modal-content">
+            <div class="editor-modal-header">
+                <h3 style="margin: 0;">Sisipkan Link</h3>
+                <button class="close-btn" onclick="closeInsertLinkModal()">&times;</button>
             </div>
-            <div class="modal-body">
-                <form id="modalArticleForm">
-                    <div class="form-group">
-                        <label class="form-label">Judul Artikel</label>
-                        <input type="text" class="form-input" id="modalArticleTitle" required>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Kategori</label>
-                            <select class="form-select" id="modalArticleCategory" required>
-                                <option value="">Pilih Kategori</option>
-                                <option value="Pemerintahan">Pemerintahan</option>
-                                <option value="Pertanian">Pertanian</option>
-                                <option value="Kesehatan">Kesehatan</option>
-                                <option value="Pendidikan">Pendidikan</option>
-                                <option value="Ekonomi">Ekonomi</option>
-                                <option value="Keamanan">Keamanan</option>
-                                <option value="Pembangunan">Pembangunan</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Status</label>
-                            <select class="form-select" id="modalArticleStatus">
-                                <option value="draft">Draft</option>
-                                <option value="published">Publikasi</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Gambar Utama (URL)</label>
-                        <input type="url" class="form-input" id="modalArticleImage" placeholder="https://example.com/image.jpg">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Konten Artikel</label>
-                        <textarea class="form-textarea" id="modalArticleContent" required placeholder="Tulis konten artikel Anda di sini..."></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Tag (pisahkan dengan koma)</label>
-                        <input type="text" class="form-input" id="modalArticleTags" placeholder="contoh: Desa, Pembangunan, Ekonomi">
-                    </div>
-                    
-                    <div class="form-group">
-                        <button type="submit" class="btn">Simpan Artikel</button>
-                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
-                    </div>
-                </form>
+            <div class="editor-modal-body">
+                <div class="form-group">
+                    <label class="form-label">URL Link</label>
+                    <input type="url" class="form-input" id="linkUrl" placeholder="https://example.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Teks Tampilan (Opsional)</label>
+                    <input type="text" class="form-input" id="linkText" placeholder="Teks yang akan ditampilkan">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="linkNewTab" checked>
+                        Buka di tab baru
+                    </label>
+                </div>
+            </div>
+            <div class="editor-modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeInsertLinkModal()">Batal</button>
+                <button type="button" class="btn" id="insertLinkConfirmBtn">Sisipkan Link</button>
             </div>
         </div>
     </div>
 
-    <!-- Tambahkan sebelum script lainnya -->
+    <!-- Modal untuk Insert Gambar -->
+    <div class="editor-modal" id="insertImageModal">
+        <div class="editor-modal-content">
+            <div class="editor-modal-header">
+                <h3 style="margin: 0;">Sisipkan Gambar</h3>
+                <button class="close-btn" onclick="closeInsertImageModal()">&times;</button>
+            </div>
+            <div class="editor-modal-body">
+                <div class="upload-area" id="contentImageUploadArea">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #9ca3af; margin-bottom: 0.5rem;"></i>
+                    <p style="margin: 0; color: #6b7280; font-weight: 500;">Klik untuk upload gambar</p>
+                    <small style="color: #9ca3af;">Format: JPG, PNG, GIF (Maks. 2MB)</small>
+                </div>
+                
+                <input type="file" id="contentImageFile" accept="image/*" style="display: none;">
+                
+                <div id="contentImagePreview" style="display: none; margin-top: 1rem; padding: 1rem; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc;">
+                    <p style="margin-bottom: 0.5rem; font-weight: 500; color: #374151;">Preview Gambar:</p>
+                    <img id="contentPreviewImg" style="max-width: 100%; max-height: 200px; border-radius: 6px; display: block; margin: 0 auto;">
+                </div>
+                
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label class="form-label">Deskripsi Gambar (Alt Text)</label>
+                    <input type="text" class="form-input" id="imageAltText" placeholder="Deskripsi singkat gambar...">
+                </div>
+            </div>
+            <div class="editor-modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeInsertImageModal()">Batal</button>
+                <button type="button" class="btn" id="insertImageConfirmBtn" disabled>Sisipkan Gambar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
     <script src="js/firebase-config.js"></script>
     <script src="js/utils.js"></script>
-    <script src="js/image-upload.js"></script>
-    <script src="js/article-editor.js"></script>
     <script src="js/dashboard.js"></script>
     
     <script>
-    // Enhanced upload area functionality
+    // Enhanced profile functionality
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('Dashboard HTML loaded, initializing upload area...');
+        console.log('Dashboard HTML loaded, initializing enhanced features...');
         
+        // Load profile data when profile section is shown
+        const profileNav = document.querySelector('[data-section="profile"]');
+        if (profileNav) {
+            profileNav.addEventListener('click', function() {
+                setTimeout(() => {
+                    loadProfileData();
+                }, 100);
+            });
+        }
+
+        // Initialize profile photo preview
+        const profilePhotoInput = document.getElementById('profilePhoto');
+        const profilePhotoPreview = document.getElementById('profilePhotoPreview');
+        
+        if (profilePhotoInput && profilePhotoPreview) {
+            profilePhotoInput.addEventListener('input', function() {
+                if (this.value) {
+                    profilePhotoPreview.style.backgroundImage = `url('${this.value}')`;
+                    profilePhotoPreview.classList.add('show');
+                } else {
+                    profilePhotoPreview.classList.remove('show');
+                }
+            });
+        }
+        
+        // Initialize WYSIWYG editor
+        initializeWYSIWYGEditor();
+        
+        // Setup upload areas
+        setupUploadAreas();
+        
+        // Setup profile form submission
+        const profileForm = document.getElementById('profileForm');
+        if (profileForm) {
+            profileForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveProfile();
+            });
+        }
+    });
+
+    // Load profile data from Firebase
+    async function loadProfileData() {
+        try {
+            if (!currentUser) {
+                console.error('No current user found');
+                return;
+            }
+
+            console.log('Loading profile data for user:', currentUser.uid);
+            
+            const userDoc = await db.collection('users').doc(currentUser.uid).get();
+            if (userDoc.exists) {
+                const userData = userDoc.data();
+                console.log('Profile data loaded:', userData);
+                
+                // Fill form with user data
+                document.getElementById('profileName').value = userData.name || '';
+                document.getElementById('profileUsername').value = userData.username || '';
+                document.getElementById('profileEmail').value = userData.email || '';
+                document.getElementById('profileBio').value = userData.bio || '';
+                document.getElementById('profilePhoto').value = userData.photo || '';
+                
+                // Update photo preview
+                if (userData.photo) {
+                    const profilePhotoPreview = document.getElementById('profilePhotoPreview');
+                    if (profilePhotoPreview) {
+                        profilePhotoPreview.style.backgroundImage = `url('${userData.photo}')`;
+                        profilePhotoPreview.classList.add('show');
+                    }
+                }
+                
+                console.log('Profile form populated successfully');
+            } else {
+                console.log('No user data found in Firestore, using default values');
+                // Set default values if no user data exists
+                document.getElementById('profileName').value = currentUser.displayName || '';
+                document.getElementById('profileUsername').value = currentUser.email?.split('@')[0] || '';
+                document.getElementById('profileEmail').value = currentUser.email || '';
+            }
+        } catch (error) {
+            console.error('Error loading profile data:', error);
+            // Fallback to current user data
+            document.getElementById('profileName').value = currentUser.displayName || '';
+            document.getElementById('profileUsername').value = currentUser.email?.split('@')[0] || '';
+            document.getElementById('profileEmail').value = currentUser.email || '';
+        }
+    }
+
+    // Enhanced save profile function
+    async function saveProfile() {
+        try {
+            showLoading('Menyimpan profil...');
+            
+            const name = document.getElementById('profileName').value;
+            const username = document.getElementById('profileUsername').value;
+            const email = document.getElementById('profileEmail').value;
+            const bio = document.getElementById('profileBio').value;
+            const photo = document.getElementById('profilePhoto').value;
+            
+            // Validasi form
+            if (!name || !username || !email) {
+                throw new Error('Nama, username, dan email wajib diisi');
+            }
+            
+            // Prepare user data
+            const userData = {
+                name: name.trim(),
+                username: username.trim(),
+                email: email.trim(),
+                bio: bio.trim(),
+                photo: photo.trim(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            console.log('Saving profile data:', userData);
+            
+            // Update data user di Firestore
+            await db.collection('users').doc(currentUser.uid).set(userData, { merge: true });
+            
+            // Update currentUser data
+            currentUser.displayName = name;
+            currentUser.email = email;
+            
+            // Update UI
+            document.getElementById('userName').textContent = name;
+            document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
+            
+            // Update localStorage
+            const storedUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            storedUser.name = name;
+            storedUser.email = email;
+            localStorage.setItem('currentUser', JSON.stringify(storedUser));
+            
+            hideLoading();
+            showNotification('Profil berhasil diperbarui!', 'success');
+            
+        } catch (error) {
+            console.error('Error saving profile:', error);
+            showError(`Gagal menyimpan profil: ${error.message}`);
+            hideLoading();
+        }
+    }
+
+    // Enhanced WYSIWYG Editor Initialization
+    function initializeWYSIWYGEditor() {
+        const editorContent = document.getElementById('articleContent');
+        const toolbarButtons = document.querySelectorAll('.toolbar-btn[data-command]');
+        const formatBlockSelect = document.getElementById('formatBlock');
+        const fontSizeSelect = document.getElementById('fontSize');
+        const textColorInput = document.getElementById('textColor');
+        const backgroundColorInput = document.getElementById('backgroundColor');
+        const insertLinkBtn = document.getElementById('insertLinkBtn');
+        const insertImageBtn = document.getElementById('insertImageBtn');
+        const insertLinkConfirmBtn = document.getElementById('insertLinkConfirmBtn');
+        const insertImageConfirmBtn = document.getElementById('insertImageConfirmBtn');
+        const checklistBtn = document.getElementById('checklistBtn');
+        const charCounter = document.getElementById('charCounter');
+        
+        if (!editorContent) {
+            console.error('Editor content element not found');
+            return;
+        }
+
+        // Fungsi untuk menjalankan command
+        function executeCommand(command, value = null) {
+            try {
+                document.execCommand(command, false, value);
+                editorContent.focus();
+                updateCharacterCounter();
+            } catch (error) {
+                console.error('Error executing command:', command, value, error);
+            }
+        }
+
+        // Setup toolbar buttons
+        toolbarButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const command = button.getAttribute('data-command');
+                const value = button.getAttribute('data-value');
+                executeCommand(command, value);
+                
+                // Toggle active state untuk format buttons
+                if (['bold', 'italic', 'underline'].includes(command)) {
+                    button.classList.toggle('active');
+                }
+            });
+        });
+
+        // Format block dropdown
+        if (formatBlockSelect) {
+            formatBlockSelect.addEventListener('change', (e) => {
+                executeCommand('formatBlock', e.target.value);
+            });
+        }
+
+        // Font size dropdown
+        if (fontSizeSelect) {
+            fontSizeSelect.addEventListener('change', (e) => {
+                executeCommand('fontSize', e.target.value);
+            });
+        }
+
+        // Text color
+        if (textColorInput) {
+            textColorInput.addEventListener('change', (e) => {
+                executeCommand('foreColor', e.target.value);
+            });
+        }
+
+        // Background color
+        if (backgroundColorInput) {
+            backgroundColorInput.addEventListener('change', (e) => {
+                executeCommand('hiliteColor', e.target.value);
+            });
+        }
+
+        // Insert link
+        if (insertLinkBtn) {
+            insertLinkBtn.addEventListener('click', showInsertLinkModal);
+        }
+
+        if (insertLinkConfirmBtn) {
+            insertLinkConfirmBtn.addEventListener('click', () => {
+                const url = document.getElementById('linkUrl').value;
+                const text = document.getElementById('linkText').value || url;
+                const newTab = document.getElementById('linkNewTab').checked;
+                
+                if (url) {
+                    const target = newTab ? ' target="_blank"' : '';
+                    executeCommand('insertHTML', `<a href="${url}"${target}>${text}</a>`);
+                    closeInsertLinkModal();
+                }
+            });
+        }
+
+        // Insert image - PERBAIKAN UTAMA
+        if (insertImageBtn) {
+            insertImageBtn.addEventListener('click', showInsertImageModal);
+        }
+
+        // Setup untuk upload gambar dalam konten - PERBAIKAN UTAMA
+        const contentUploadArea = document.getElementById('contentImageUploadArea');
+        const contentFileInput = document.getElementById('contentImageFile');
+        
+        if (contentUploadArea && contentFileInput) {
+            // Click to upload
+            contentUploadArea.addEventListener('click', () => {
+                console.log('Content upload area clicked');
+                contentFileInput.click();
+            });
+            
+            // Drag and drop functionality
+            contentUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                contentUploadArea.classList.add('dragover');
+            });
+            
+            contentUploadArea.addEventListener('dragleave', () => {
+                contentUploadArea.classList.remove('dragover');
+            });
+            
+            contentUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                contentUploadArea.classList.remove('dragover');
+                
+                if (e.dataTransfer.files.length) {
+                    const file = e.dataTransfer.files[0];
+                    console.log('File dropped:', file.name);
+                    
+                    if (validateImageFile(file)) {
+                        contentFileInput.files = e.dataTransfer.files;
+                        handleContentImageSelection(file);
+                    }
+                }
+            });
+            
+            // File input change
+            contentFileInput.addEventListener('change', function(e) {
+                if (this.files.length > 0) {
+                    const file = this.files[0];
+                    console.log('Content image selected:', file.name);
+                    
+                    if (validateImageFile(file)) {
+                        handleContentImageSelection(file);
+                    }
+                }
+            });
+        }
+
+        // Handle content image selection
+        function handleContentImageSelection(file) {
+            const insertBtn = document.getElementById('insertImageConfirmBtn');
+            if (insertBtn) {
+                insertBtn.disabled = false;
+            }
+            
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewImg = document.getElementById('contentPreviewImg');
+                const previewContainer = document.getElementById('contentImagePreview');
+                
+                if (previewImg) {
+                    previewImg.src = e.target.result;
+                }
+                if (previewContainer) {
+                    previewContainer.style.display = 'block';
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Validate image file
+        function validateImageFile(file) {
+            // Check file type
+            if (!file.type.match('image.*')) {
+                showError('Hanya file gambar yang diizinkan (JPG, PNG, GIF)');
+                return false;
+            }
+            
+            // Check file size (2MB limit)
+            if (file.size > 2 * 1024 * 1024) {
+                showError('Ukuran file maksimal 2MB');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Insert image into editor - PERBAIKAN UTAMA
+        if (insertImageConfirmBtn) {
+            insertImageConfirmBtn.addEventListener('click', async function() {
+                const file = contentFileInput.files[0];
+                const altText = document.getElementById('imageAltText').value || 'Gambar artikel';
+                
+                if (file) {
+                    await uploadAndInsertContentImage(file, altText);
+                } else {
+                    showError('Pilih gambar terlebih dahulu');
+                }
+            });
+        }
+
+        // Upload and insert content image - FUNGSI BARU YANG DIPERBAIKI
+        // PERBAIKAN: Upload and insert content image - Menggunakan DesaMediaUtils
+async function uploadAndInsertContentImage(file, altText = 'Gambar artikel') {
+    try {
+        console.log('Uploading content image...');
+        
+        // Show loading state
+        const insertBtn = document.getElementById('insertImageConfirmBtn');
+        if (insertBtn) {
+            insertBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengupload...';
+            insertBtn.disabled = true;
+        }
+
+        // PERBAIKAN: Gunakan DesaMediaUtils untuk upload gambar
+        const uploadResult = await DesaMediaUtils.uploadContentImage(file, altText);
+        
+        if (!uploadResult.success) {
+            throw new Error(uploadResult.error);
+        }
+
+        console.log('Image uploaded successfully:', uploadResult.url);
+
+        // Insert image into editor
+        const imgHTML = `<img src="${uploadResult.url}" alt="${altText}" style="max-width: 100%; height: auto; border-radius: 6px; margin: 1rem 0;">`;
+        executeCommand('insertHTML', imgHTML);
+
+        // Close modal and reset
+        closeInsertImageModal();
+
+        // Show success message
+        showNotification('Gambar berhasil disisipkan!', 'success');
+
+    } catch (error) {
+        console.error('Error uploading content image:', error);
+        
+        let errorMessage = 'Error mengupload gambar: ';
+        if (error.message.includes('storage/unauthorized')) {
+            errorMessage += 'Tidak memiliki izin untuk mengupload gambar.';
+        } else if (error.message.includes('storage/retry-limit-exceeded')) {
+            errorMessage += 'Upload gagal setelah beberapa percobaan. Periksa koneksi internet Anda.';
+        } else {
+            errorMessage += error.message;
+        }
+        
+        showError(errorMessage);
+        
+        // Reset button state
+        const insertBtn = document.getElementById('insertImageConfirmBtn');
+        if (insertBtn) {
+            insertBtn.innerHTML = 'Sisipkan Gambar';
+            insertBtn.disabled = false;
+        }
+    }
+}
+
+        // Checklist functionality
+        if (checklistBtn) {
+            checklistBtn.addEventListener('click', () => {
+                executeCommand('insertHTML', '<div class="checklist-item"><input type="checkbox"><span>Item checklist</span></div>');
+            });
+        }
+
+        // Keyboard shortcuts
+        editorContent.addEventListener('keydown', (e) => {
+            // Ctrl+B for bold
+            if (e.ctrlKey && e.key === 'b') {
+                e.preventDefault();
+                executeCommand('bold');
+            }
+            // Ctrl+I for italic
+            else if (e.ctrlKey && e.key === 'i') {
+                e.preventDefault();
+                executeCommand('italic');
+            }
+            // Ctrl+U for underline
+            else if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+                executeCommand('underline');
+            }
+            // Ctrl+Z for undo
+            else if (e.ctrlKey && e.key === 'z') {
+                e.preventDefault();
+                executeCommand('undo');
+            }
+            // Ctrl+Y for redo
+            else if (e.ctrlKey && e.key === 'y') {
+                e.preventDefault();
+                executeCommand('redo');
+            }
+            // Tab for indent
+            else if (e.key === 'Tab') {
+                e.preventDefault();
+                executeCommand('insertHTML', '&nbsp;&nbsp;&nbsp;&nbsp;');
+            }
+        });
+
+        // Clean paste
+        editorContent.addEventListener('paste', (e) => {
+            e.preventDefault();
+            
+            // Get pasted data as text
+            const text = (e.clipboardData || window.clipboardData).getData('text');
+            
+            // Clean up the text (remove extra formatting)
+            const cleanText = text
+                .replace(/\r?\n|\r/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+            
+            // Insert cleaned text
+            document.execCommand('insertText', false, cleanText);
+            updateCharacterCounter();
+        });
+
+        // Character counter
+        function updateCharacterCounter() {
+            const text = editorContent.innerText || '';
+            const length = text.length;
+            if (charCounter) {
+                charCounter.textContent = `${length} karakter`;
+                
+                if (length > 5000) {
+                    charCounter.classList.add('warning');
+                } else {
+                    charCounter.classList.remove('warning');
+                }
+                
+                if (length > 10000) {
+                    charCounter.classList.add('error');
+                } else {
+                    charCounter.classList.remove('error');
+                }
+            }
+        }
+
+        editorContent.addEventListener('input', updateCharacterCounter);
+
+        console.log('WYSIWYG Editor initialized successfully');
+    }
+
+    // Enhanced upload area functionality untuk gambar utama
+    function setupUploadAreas() {
+        console.log('Setting up upload areas...');
+        
+        // Setup untuk upload gambar utama - PERBAIKAN
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('articleImageFile');
         
         if (uploadArea && fileInput) {
-            console.log('Upload area elements found, setting up event listeners...');
-            
             // Click to upload
             uploadArea.addEventListener('click', () => {
                 console.log('Upload area clicked');
@@ -494,62 +1441,172 @@
                 uploadArea.classList.remove('dragover');
                 
                 if (e.dataTransfer.files.length) {
-                    console.log('File dropped:', e.dataTransfer.files[0].name);
-                    fileInput.files = e.dataTransfer.files;
-                    const event = new Event('change');
-                    fileInput.dispatchEvent(event);
-                }
-            });
-        } else {
-            console.error('Upload area or file input not found!');
-        }
-
-        // Character counter
-        const contentTextarea = document.getElementById('articleContent');
-        const charCounter = document.getElementById('charCounter');
-        
-        if (contentTextarea && charCounter) {
-            contentTextarea.addEventListener('input', function() {
-                const length = this.value.length;
-                charCounter.textContent = `${length} karakter`;
-                
-                if (length > 5000) {
-                    charCounter.classList.add('warning');
-                } else {
-                    charCounter.classList.remove('warning');
-                }
-                
-                if (length > 10000) {
-                    charCounter.classList.add('error');
-                } else {
-                    charCounter.classList.remove('error');
-                }
-            });
-        }
-
-        // Loading state untuk submit button
-        const articleForm = document.getElementById('articleForm');
-        const submitBtn = document.getElementById('submitBtn');
-        
-        if (articleForm && submitBtn) {
-            articleForm.addEventListener('submit', function() {
-                console.log('Form submission detected, adding loading state...');
-                submitBtn.classList.add('btn-loading');
-                submitBtn.disabled = true;
-                
-                // Reset loading state setelah 3 detik (fallback)
-                setTimeout(() => {
-                    if (submitBtn.classList.contains('btn-loading')) {
-                        console.log('Fallback: Removing loading state after timeout');
-                        submitBtn.classList.remove('btn-loading');
-                        submitBtn.disabled = false;
+                    const file = e.dataTransfer.files[0];
+                    console.log('File dropped:', file.name);
+                    
+                    if (validateMainImageFile(file)) {
+                        fileInput.files = e.dataTransfer.files;
+                        handleMainImageSelection(file);
                     }
-                }, 3000);
+                }
+            });
+            
+            // File input change
+            fileInput.addEventListener('change', function(e) {
+                if (this.files.length > 0) {
+                    const file = this.files[0];
+                    console.log('Main image selected:', file.name);
+                    
+                    if (validateMainImageFile(file)) {
+                        handleMainImageSelection(file);
+                    }
+                }
             });
         }
+
+        console.log('Upload areas setup complete');
+    }
+
+    // Validate main image file
+    function validateMainImageFile(file) {
+        // Check file type
+        if (!file.type.match('image.*')) {
+            showError('Hanya file gambar yang diizinkan (JPG, PNG, GIF)');
+            return false;
+        }
         
-        console.log('Dashboard HTML initialization complete');
-    });
+        // Check file size (2MB limit)
+        if (file.size > 2 * 1024 * 1024) {
+            showError('Ukuran file maksimal 2MB');
+            return false;
+        }
+        
+        return true;
+    }
+
+    // Handle main image selection
+    function handleMainImageSelection(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const previewImg = document.getElementById('previewImg');
+            const preview = document.getElementById('imagePreview');
+            const uploadArea = document.getElementById('uploadArea');
+            
+            if (previewImg) previewImg.src = e.target.result;
+            if (preview) preview.style.display = 'block';
+            if (uploadArea) uploadArea.style.display = 'none';
+            
+            showNotification('Gambar berhasil diupload!', 'success');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // Fungsi untuk menampilkan pesan error
+    function showError(message) {
+        const errorDiv = document.getElementById('errorMessage');
+        if (errorDiv) {
+            errorDiv.innerHTML = `
+                <div class="error-message">
+                    <strong><i class="fas fa-exclamation-triangle"></i> Error:</strong> ${message}
+                    <button class="refresh-btn" onclick="hideError()" style="margin-top: 0.5rem;">
+                        <i class="fas fa-times"></i> Tutup
+                    </button>
+                </div>
+            `;
+            errorDiv.style.display = 'block';
+        }
+        
+        console.error('Dashboard Error:', message);
+    }
+    
+    // Fungsi untuk menyembunyikan pesan error
+    function hideError() {
+        const errorDiv = document.getElementById('errorMessage');
+        if (errorDiv) {
+            errorDiv.style.display = 'none';
+        }
+    }
+    
+    // Fungsi untuk menampilkan loading
+    function showLoading(message = 'Memuat...') {
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const loadingText = document.getElementById('loadingText');
+        
+        if (loadingOverlay) {
+            loadingOverlay.style.display = 'flex';
+        }
+        
+        if (loadingText) {
+            loadingText.textContent = message;
+        }
+    }
+    
+    // Fungsi untuk menyembunyikan loading
+    function hideLoading() {
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        if (loadingOverlay) {
+            loadingOverlay.style.display = 'none';
+        }
+    }
+
+    // Fungsi untuk membersihkan preview gambar
+    function clearImagePreview() {
+        const preview = document.getElementById('imagePreview');
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('articleImageFile');
+        
+        if (preview) preview.style.display = 'none';
+        if (uploadArea) uploadArea.style.display = 'block';
+        if (fileInput) fileInput.value = '';
+    }
+
+    // Fungsi untuk menampilkan modal insert link
+    function showInsertLinkModal() {
+        const modal = document.getElementById('insertLinkModal');
+        if (modal) {
+            modal.style.display = 'flex';
+            document.getElementById('linkUrl').focus();
+        }
+    }
+    
+    // Fungsi untuk menutup modal insert link
+    function closeInsertLinkModal() {
+        const modal = document.getElementById('insertLinkModal');
+        const urlInput = document.getElementById('linkUrl');
+        const textInput = document.getElementById('linkText');
+        const newTabCheckbox = document.getElementById('linkNewTab');
+        
+        if (modal) modal.style.display = 'none';
+        if (urlInput) urlInput.value = '';
+        if (textInput) textInput.value = '';
+        if (newTabCheckbox) newTabCheckbox.checked = true;
+    }
+    
+    // Fungsi untuk menampilkan modal insert gambar
+    function showInsertImageModal() {
+        const modal = document.getElementById('insertImageModal');
+        if (modal) {
+            modal.style.display = 'flex';
+        }
+    }
+    
+    // Fungsi untuk menutup modal insert gambar
+    function closeInsertImageModal() {
+        const modal = document.getElementById('insertImageModal');
+        const fileInput = document.getElementById('contentImageFile');
+        const previewContainer = document.getElementById('contentImagePreview');
+        const altTextInput = document.getElementById('imageAltText');
+        const insertBtn = document.getElementById('insertImageConfirmBtn');
+        
+        if (modal) modal.style.display = 'none';
+        if (fileInput) fileInput.value = '';
+        if (previewContainer) previewContainer.style.display = 'none';
+        if (altTextInput) altTextInput.value = '';
+        if (insertBtn) {
+            insertBtn.disabled = true;
+            insertBtn.innerHTML = 'Sisipkan Gambar';
+        }
+    }
 
     function addTag(tag) {
         console.log('Adding tag:', tag);
@@ -589,6 +1646,33 @@
             console.log('🔐 Current Path:', window.location.pathname);
         });
     }
+
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            const sidebar = document.getElementById('sidebar');
+            const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+            if (sidebar) sidebar.classList.remove('mobile-open');
+            if (mobileNavOverlay) mobileNavOverlay.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Auto-hide loading setelah timeout (fallback)
+    setTimeout(() => {
+        hideLoading();
+    }, 10000);
+
+    // Make functions globally available
+    window.addTag = addTag;
+    window.showInsertLinkModal = showInsertLinkModal;
+    window.closeInsertLinkModal = closeInsertLinkModal;
+    window.showInsertImageModal = showInsertImageModal;
+    window.closeInsertImageModal = closeInsertImageModal;
+    window.clearImagePreview = clearImagePreview;
+    window.loadProfileData = loadProfileData;
+    window.saveProfile = saveProfile;
+    window.showNewArticleSection = showNewArticleSection;
     </script>
 </body>
 </html>

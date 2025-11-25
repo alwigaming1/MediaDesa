@@ -426,7 +426,7 @@ nav ul li a.active {
     color: var(--gray);
 }
 
-/* SIMPLIFIED CATEGORIES - Clean and Minimal */
+/* SIMPLIFIED CATEGORIES - Ukuran Diperkecil */
 .categories {
     padding: 2rem 0;
     background: var(--light);
@@ -434,14 +434,14 @@ nav ul li a.active {
 
 .categories-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.8rem;
 }
 
 .category-card {
     background: var(--white);
-    padding: 1.5rem 1rem;
-    border-radius: 8px;
+    padding: 1rem 0.5rem;
+    border-radius: 6px;
     text-align: center;
     box-shadow: var(--shadow);
     transition: var(--transition);
@@ -457,7 +457,7 @@ nav ul li a.active {
     top: 0;
     left: 0;
     right: 0;
-    height: 3px;
+    height: 2px;
     background: var(--primary);
     transform: scaleX(0);
     transition: transform 0.3s ease;
@@ -468,29 +468,29 @@ nav ul li a.active {
 }
 
 .category-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
 }
 
 .category-icon {
-    font-size: 1.8rem;
-    margin-bottom: 0.8rem;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
     color: var(--primary);
 }
 
 .category-title {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     margin-bottom: 0.3rem;
     font-weight: 600;
     color: var(--dark);
 }
 
 .category-count {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: var(--gray);
     background: var(--light);
-    padding: 0.2rem 0.6rem;
-    border-radius: 12px;
+    padding: 0.15rem 0.4rem;
+    border-radius: 10px;
     display: inline-block;
 }
 
@@ -793,7 +793,7 @@ footer {
     }
     
     .categories-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
     
     .latest-news-grid {
@@ -827,16 +827,16 @@ footer {
     }
     
     .categories-grid {
-        grid-template-columns: 1fr;
-        gap: 0.8rem;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.6rem;
     }
     
     .category-card {
-        padding: 1.2rem 0.5rem;
+        padding: 0.8rem 0.3rem;
     }
     
     .category-icon {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
     }
     
     .news-item {
@@ -870,7 +870,7 @@ footer {
     }
     
     .category-card {
-        padding: 1rem;
+        padding: 0.8rem;
     }
     
     .section {

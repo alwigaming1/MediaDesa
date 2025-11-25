@@ -45,9 +45,6 @@
                     </ul>
                 </nav>
                 <div class="header-actions">
-                    <a href="login.html" class="btn btn-outline" style="margin-right: 1rem;">
-                        <i class="fas fa-pen"></i> Area Penulis
-                    </a>
                     <button class="search-btn"><i class="fas fa-search"></i></button>
                     <div class="mobile-menu">☰</div>
                 </div>
@@ -61,7 +58,6 @@
             <!-- Konten Artikel Utama -->
             <div class="article-main">
                 <div class="article-header">
-                    <!-- Tombol Kembali dihilangkan -->
                     <div class="article-category-wrapper">
                         <span class="article-category" id="articleCategory">DesaMedia / Berita</span>
                     </div>
@@ -121,63 +117,14 @@
                 <div class="sidebar-widget">
                     <h3 class="widget-title">Berita Populer</h3>
                     <div class="popular-sidebar-list" id="sidebarPopularNews">
-                        <div class="popular-sidebar-item">
-                            <div class="popular-sidebar-image" style="background-image: url('https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80')"></div>
-                            <div class="popular-sidebar-content">
-                                <h4 class="popular-sidebar-title">Pembangunan Jembatan Desa Selesai Tepat Waktu</h4>
-                                <div class="popular-sidebar-meta">250 dilihat • 2 hari lalu</div>
-                            </div>
-                        </div>
-                        <div class="popular-sidebar-item">
-                            <div class="popular-sidebar-image" style="background-image: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80')"></div>
-                            <div class="popular-sidebar-content">
-                                <h4 class="popular-sidebar-title">Festival Budaya Desa Sopa Sukses Digelar</h4>
-                                <div class="popular-sidebar-meta">180 dilihat • 3 hari lalu</div>
-                            </div>
-                        </div>
-                        <div class="popular-sidebar-item">
-                            <div class="popular-sidebar-image" style="background-image: url('https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80')"></div>
-                            <div class="popular-sidebar-content">
-                                <h4 class="popular-sidebar-title">Program Bantuan UMKM untuk Warga Desa</h4>
-                                <div class="popular-sidebar-meta">150 dilihat • 5 hari lalu</div>
-                            </div>
-                        </div>
+                        <!-- Berita populer akan diisi oleh JavaScript -->
                     </div>
                 </div>
                 
                 <div class="sidebar-widget">
                     <h3 class="widget-title">Kategori</h3>
                     <ul class="categories-sidebar-list" id="sidebarCategories">
-                        <li class="categories-sidebar-item">
-                            <a href="#" class="categories-sidebar-link" onclick="filterByCategory('Pemerintahan')">
-                                Pemerintahan
-                                <span class="category-sidebar-count">12</span>
-                            </a>
-                        </li>
-                        <li class="categories-sidebar-item">
-                            <a href="#" class="categories-sidebar-link" onclick="filterByCategory('Pembangunan')">
-                                Pembangunan
-                                <span class="category-sidebar-count">8</span>
-                            </a>
-                        </li>
-                        <li class="categories-sidebar-item">
-                            <a href="#" class="categories-sidebar-link" onclick="filterByCategory('Ekonomi')">
-                                Ekonomi
-                                <span class="category-sidebar-count">15</span>
-                            </a>
-                        </li>
-                        <li class="categories-sidebar-item">
-                            <a href="#" class="categories-sidebar-link" onclick="filterByCategory('Pendidikan')">
-                                Pendidikan
-                                <span class="category-sidebar-count">10</span>
-                            </a>
-                        </li>
-                        <li class="categories-sidebar-item">
-                            <a href="#" class="categories-sidebar-link" onclick="filterByCategory('Kesehatan')">
-                                Kesehatan
-                                <span class="category-sidebar-count">7</span>
-                            </a>
-                        </li>
+                        <!-- Kategori akan diisi oleh JavaScript -->
                     </ul>
                 </div>
             </aside>
@@ -239,7 +186,6 @@
                     <h3 class="footer-title">Tautan Cepat</h3>
                     <ul class="footer-links">
                         <li><a href="index.html">Beranda</a></li>
-                        <li><a href="login.html">Area Penulis</a></li>
                         <li><a href="#">Tentang Kami</a></li>
                         <li><a href="#">Kontak</a></li>
                         <li><a href="#">Kebijakan Privasi</a></li>
@@ -256,7 +202,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2023 DesaMedia. All rights reserved. | Developed with <i class="fas fa-heart" style="color: #e53e3e;"></i> for Desa Community</p>
+                <p>&copy; 2025 DesaMedia. | Developed By Muh Alwi Syahrir</p>
             </div>
         </div>
     </footer>
@@ -268,7 +214,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
     <script src="js/firebase-config.js"></script>
     <script src="js/utils.js"></script>
-    <script src="js/article.js"></script>
     
     <script>
     // Initialize mobile sidebar
@@ -309,7 +254,7 @@
                     await incrementArticleViews(articleId);
                     
                     // Display the article
-                    displayArticleSulengkaStyle(article);
+                    displayArticle(article);
                     loadRelatedArticles(article);
                     loadSidebarContent();
                     setupShareButtons(article);
@@ -340,8 +285,8 @@
         }
     }
 
-    function displayArticleSulengkaStyle(article) {
-        console.log('Displaying article:', article.title);
+    function displayArticle(article) {
+        console.log('Displaying article:', article);
         
         // Update document title
         document.title = `${article.title} - DesaMedia`;
@@ -352,7 +297,7 @@
         
         // Update meta information
         document.getElementById('metaAuthor').textContent = article.author;
-        document.getElementById('metaDate').textContent = formatDateSulengka(article.createdAt);
+        document.getElementById('metaDate').textContent = formatDate(article.createdAt);
         document.getElementById('metaViews').textContent = article.views || 0;
         document.getElementById('metaReadTime').textContent = article.readTime || calculateReadTime(article.content);
         
@@ -365,16 +310,16 @@
         }
         
         // Update article content with enhanced formatting
-        document.getElementById('articleBody').innerHTML = formatContentSulengka(article.content);
+        document.getElementById('articleBody').innerHTML = formatContent(article.content);
         
         // Update tags
-        updateTagsSulengka(article.tags);
+        updateTags(article.tags);
         
-        // Update author information
-        updateAuthorSulengka(article.author);
+        // Update author information - PERBAIKAN UTAMA: Panggil fungsi yang benar
+        updateAuthorInfo(article.author);
     }
 
-    function formatDateSulengka(dateString) {
+    function formatDate(dateString) {
         try {
             const date = new Date(dateString);
             const options = { 
@@ -389,7 +334,7 @@
         }
     }
 
-    function formatContentSulengka(content) {
+    function formatContent(content) {
         if (!content) return '<p>Konten tidak tersedia.</p>';
         
         if (content.includes('<')) {
@@ -412,7 +357,7 @@
         return formattedContent;
     }
 
-    function updateTagsSulengka(tags) {
+    function updateTags(tags) {
         const tagsContainer = document.getElementById('articleTags');
         if (tags && tags.length > 0) {
             tagsContainer.innerHTML = tags.map(tag => 
@@ -423,23 +368,56 @@
         }
     }
 
-    async function updateAuthorSulengka(authorName) {
+    // PERBAIKAN UTAMA: Fungsi updateAuthorInfo yang benar-benar bekerja
+    async function updateAuthorInfo(authorName) {
         try {
-            const snapshot = await db.collection('users').where('username', '==', authorName).get();
-            let authorProfile = {};
+            console.log('Loading author profile for:', authorName);
             
-            if (!snapshot.empty) {
-                snapshot.forEach(doc => {
-                    authorProfile = doc.data();
-                });
+            // Coba ambil data penulis dari Firestore
+            let authorProfile = null;
+            
+            try {
+                // Cari berdasarkan username terlebih dahulu
+                const usernameQuery = await db.collection('users')
+                    .where('username', '==', authorName)
+                    .limit(1)
+                    .get();
+                
+                if (!usernameQuery.empty) {
+                    usernameQuery.forEach(doc => {
+                        authorProfile = doc.data();
+                    });
+                    console.log('Author found by username:', authorProfile);
+                } else {
+                    // Jika tidak ditemukan, cari berdasarkan name
+                    const nameQuery = await db.collection('users')
+                        .where('name', '==', authorName)
+                        .limit(1)
+                        .get();
+                        
+                    if (!nameQuery.empty) {
+                        nameQuery.forEach(doc => {
+                            authorProfile = doc.data();
+                        });
+                        console.log('Author found by name:', authorProfile);
+                    } else {
+                        console.log('Author profile not found in Firestore');
+                    }
+                }
+            } catch (error) {
+                console.error('Error querying author profile:', error);
             }
             
             const authorAvatar = document.getElementById('authorAvatar');
             const authorNameElement = document.getElementById('authorName');
             const authorBioElement = document.getElementById('authorBio');
             
-            if (authorProfile.photo) {
+            // Set avatar
+            if (authorProfile && authorProfile.photo) {
                 authorAvatar.style.backgroundImage = `url('${authorProfile.photo}')`;
+                authorAvatar.textContent = '';
+                authorAvatar.style.backgroundSize = 'cover';
+                authorAvatar.style.backgroundPosition = 'center';
             } else {
                 authorAvatar.style.backgroundColor = '#1a365d';
                 authorAvatar.style.display = 'flex';
@@ -448,13 +426,17 @@
                 authorAvatar.style.color = 'white';
                 authorAvatar.style.fontSize = '1.5rem';
                 authorAvatar.style.fontWeight = 'bold';
-                authorAvatar.textContent = authorName.charAt(0).toUpperCase();
+                authorAvatar.textContent = (authorProfile?.name || authorName || 'P').charAt(0).toUpperCase();
+                authorAvatar.style.backgroundImage = 'none';
             }
             
-            authorNameElement.textContent = authorProfile.name || authorName;
-            authorBioElement.textContent = authorProfile.bio || 'Penulis aktif di DesaMedia yang berdedikasi menyampaikan informasi terpercaya untuk masyarakat desa.';
+            // Set nama dan bio
+            authorNameElement.textContent = authorProfile?.name || authorName || 'Penulis';
+            authorBioElement.textContent = authorProfile?.bio || 'Penulis aktif di DesaMedia yang berdedikasi menyampaikan informasi terpercaya untuk masyarakat desa.';
+            
         } catch (error) {
-            console.error('Error loading author profile:', error);
+            console.error('Error in updateAuthorInfo:', error);
+            // Fallback jika error
             const authorAvatar = document.getElementById('authorAvatar');
             const authorNameElement = document.getElementById('authorName');
             const authorBioElement = document.getElementById('authorBio');
@@ -466,9 +448,9 @@
             authorAvatar.style.color = 'white';
             authorAvatar.style.fontSize = '1.5rem';
             authorAvatar.style.fontWeight = 'bold';
-            authorAvatar.textContent = authorName.charAt(0).toUpperCase();
+            authorAvatar.textContent = (authorName || 'P').charAt(0).toUpperCase();
             
-            authorNameElement.textContent = authorName;
+            authorNameElement.textContent = authorName || 'Penulis';
             authorBioElement.textContent = 'Penulis aktif di DesaMedia yang berdedikasi menyampaikan informasi terpercaya untuk masyarakat desa.';
         }
     }
@@ -536,13 +518,13 @@
         
         container.innerHTML = articles.map(article => `
             <article class="news-card" onclick="viewRelatedArticle('${article.id}')">
-                <div class="news-image" style="background-image: url('${article.image}')"></div>
+                <div class="news-image" style="background-image: url('${article.image || 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'}')"></div>
                 <div class="news-content">
                     <span class="news-category">${article.category}</span>
                     <h3 class="news-title">${article.title}</h3>
-                    <p class="news-excerpt">${article.excerpt || article.content.substring(0, 100)}...</p>
+                    <p class="news-excerpt">${article.excerpt || (article.content ? article.content.substring(0, 100) : '')}...</p>
                     <div class="news-meta">
-                        <span>${formatDateSulengka(article.createdAt)}</span>
+                        <span>${formatDate(article.createdAt)}</span>
                         <span>Oleh: ${article.author}</span>
                     </div>
                 </div>
@@ -562,11 +544,27 @@
 
     async function loadSidebarPopularNews() {
         try {
-            const snapshot = await db.collection('articles')
-                .where('status', '==', 'published')
-                .orderBy('views', 'desc')
-                .limit(5)
-                .get();
+            console.log('Memuat berita populer dari Firebase...');
+            let snapshot;
+            
+            try {
+                snapshot = await db.collection('articles')
+                    .where('status', '==', 'published')
+                    .orderBy('views', 'desc')
+                    .limit(5)
+                    .get();
+            } catch (error) {
+                // Jika error karena index, ambil tanpa orderBy
+                if (error.code === 'failed-precondition') {
+                    console.warn('Index untuk views belum dibuat, mengambil data tanpa orderBy...');
+                    snapshot = await db.collection('articles')
+                        .where('status', '==', 'published')
+                        .limit(5)
+                        .get();
+                } else {
+                    throw error;
+                }
+            }
 
             const popularArticles = snapshot.docs.map(doc => ({
                 id: doc.id,
@@ -590,7 +588,7 @@
             
             const popularHTML = popularArticles.map(article => `
                 <div class="popular-sidebar-item" onclick="viewRelatedArticle('${article.id}')">
-                    <div class="popular-sidebar-image" style="background-image: url('${article.image}')"></div>
+                    <div class="popular-sidebar-image" style="background-image: url('${article.image || 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'}')"></div>
                     <div class="popular-sidebar-content">
                         <h4 class="popular-sidebar-title">${article.title}</h4>
                         <div class="popular-sidebar-meta">
@@ -602,8 +600,40 @@
             
             if (desktopContainer) desktopContainer.innerHTML = popularHTML;
             if (mobileContainer) mobileContainer.innerHTML = popularHTML;
+            
+            console.log('Berita populer berhasil dimuat:', popularArticles.length, 'artikel');
         } catch (error) {
             console.error('Error loading popular news:', error);
+            // Fallback content
+            const fallbackHTML = `
+                <div class="popular-sidebar-item">
+                    <div class="popular-sidebar-image" style="background-image: url('https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80')"></div>
+                    <div class="popular-sidebar-content">
+                        <h4 class="popular-sidebar-title">Pembangunan Jembatan Desa Selesai Tepat Waktu</h4>
+                        <div class="popular-sidebar-meta">250 dilihat • 2 hari lalu</div>
+                    </div>
+                </div>
+                <div class="popular-sidebar-item">
+                    <div class="popular-sidebar-image" style="background-image: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80')"></div>
+                    <div class="popular-sidebar-content">
+                        <h4 class="popular-sidebar-title">Festival Budaya Desa Sopa Sukses Digelar</h4>
+                        <div class="popular-sidebar-meta">180 dilihat • 3 hari lalu</div>
+                    </div>
+                </div>
+                <div class="popular-sidebar-item">
+                    <div class="popular-sidebar-image" style="background-image: url('https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80')"></div>
+                    <div class="popular-sidebar-content">
+                        <h4 class="popular-sidebar-title">Program Bantuan UMKM untuk Warga Desa</h4>
+                        <div class="popular-sidebar-meta">150 dilihat • 5 hari lalu</div>
+                    </div>
+                </div>
+            `;
+            
+            const desktopContainer = document.getElementById('sidebarPopularNews');
+            const mobileContainer = document.getElementById('mobilePopularNews');
+            
+            if (desktopContainer) desktopContainer.innerHTML = fallbackHTML;
+            if (mobileContainer) mobileContainer.innerHTML = fallbackHTML;
         }
     }
 
@@ -618,7 +648,7 @@
                 }));
             } catch (error) {
                 categoriesData = ['Pemerintahan', 'Pertanian', 'Kesehatan', 'Pendidikan', 'Ekonomi', 'Keamanan', 'Pembangunan', 'Lingkungan', 'Sosial']
-                    .map(name => ({ id: name, name }));
+                            .map(name => ({ id: name, name }));
             }
 
             const desktopContainer = document.getElementById('sidebarCategories');
@@ -626,14 +656,21 @@
             
             const categoriesWithCounts = await Promise.all(
                 categoriesData.map(async (category) => {
-                    const snapshot = await db.collection('articles')
-                        .where('status', '==', 'published')
-                        .where('category', '==', category.name)
-                        .get();
-                    return {
-                        ...category,
-                        count: snapshot.size
-                    };
+                    try {
+                        const snapshot = await db.collection('articles')
+                            .where('status', '==', 'published')
+                            .where('category', '==', category.name)
+                            .get();
+                        return {
+                            ...category,
+                            count: snapshot.size
+                        };
+                    } catch (error) {
+                        return {
+                            ...category,
+                            count: 0
+                        };
+                    }
                 })
             );
             
@@ -672,8 +709,12 @@
     }
 
     function viewRelatedArticle(articleId) {
-        localStorage.setItem('currentArticle', articleId);
-        window.location.reload();
+        console.log('Membuka artikel terkait:', articleId);
+        
+        if (articleId && !articleId.startsWith('fallback')) {
+            localStorage.setItem('currentArticle', articleId);
+            window.location.reload();
+        }
     }
 
     function setupShareButtons(article) {
@@ -734,13 +775,89 @@
     }
 
     function setupEventListeners() {
-        const mobileMenu = document.querySelector('.mobile-menu');
-        const nav = document.querySelector('nav ul');
-        
-        if (mobileMenu && nav) {
-            mobileMenu.addEventListener('click', function() {
-                nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+        try {
+            // Mobile menu toggle
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const nav = document.querySelector('nav ul');
+            const headerMain = document.querySelector('.header-main');
+            
+            if (mobileMenu && nav && headerMain) {
+                console.log('Mengatur event listener untuk mobile menu di artikel...');
+                
+                if (window.innerWidth <= 768) {
+                    nav.style.display = 'none';
+                    headerMain.style.position = 'relative';
+                }
+                
+                mobileMenu.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    console.log('Mobile menu diklik di artikel - status saat ini:', nav.style.display);
+                    
+                    if (nav.style.display === 'flex' || nav.style.display === 'block') {
+                        nav.style.display = 'none';
+                        mobileMenu.innerHTML = '☰';
+                    } else {
+                        nav.style.display = 'block';
+                        nav.style.position = 'absolute';
+                        nav.style.top = '100%';
+                        nav.style.left = '0';
+                        nav.style.right = '0';
+                        nav.style.width = '100%';
+                        nav.style.backgroundColor = 'white';
+                        nav.style.padding = '1rem 0';
+                        nav.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+                        nav.style.zIndex = '1000';
+                        nav.style.borderTop = '1px solid #e2e8f0';
+                        mobileMenu.innerHTML = '✕';
+                    }
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!e.target.closest('nav') && !e.target.closest('.mobile-menu')) {
+                        if (window.innerWidth <= 768) {
+                            nav.style.display = 'none';
+                            mobileMenu.innerHTML = '☰';
+                        }
+                    }
+                });
+
+                // Close menu when window is resized to desktop size
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth > 768) {
+                        nav.style.display = 'flex';
+                        nav.style.position = 'static';
+                        nav.style.backgroundColor = 'transparent';
+                        nav.style.padding = '0';
+                        nav.style.boxShadow = 'none';
+                        nav.style.borderTop = 'none';
+                        mobileMenu.innerHTML = '☰';
+                        headerMain.style.position = 'static';
+                    } else {
+                        nav.style.display = 'none';
+                        headerMain.style.position = 'relative';
+                    }
+                });
+            }
+            
+            // Category navigation
+            document.querySelectorAll('nav a[data-category]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const category = this.getAttribute('data-category');
+                    filterByCategory(category);
+                });
             });
+
+            // Search functionality
+            const searchBtn = document.querySelector('.search-btn');
+            if (searchBtn) {
+                searchBtn.addEventListener('click', function() {
+                    alert('Fitur pencarian akan segera tersedia!');
+                });
+            }
+        } catch (error) {
+            console.error('Error setting up event listeners:', error);
         }
     }
 
@@ -754,6 +871,11 @@
             </div>
         `;
     }
+
+    // Make functions globally available
+    window.viewRelatedArticle = viewRelatedArticle;
+    window.filterByCategory = filterByCategory;
+    window.searchByTag = searchByTag;
     </script>
 </body>
 </html>

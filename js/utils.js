@@ -1,4 +1,4 @@
-// utils.js - Utility functions untuk DesaMedia
+// utils.js - Utility functions untuk DesaMedia dengan Cloudinary Integration
 console.log('Memuat utils.js...');
 
 const DesaMediaUtils = {
@@ -82,7 +82,7 @@ const DesaMediaUtils = {
         };
     },
 
-    // Validasi email - PERBAIKAN: Fungsi validasi email yang benar
+    // Validasi email
     validateEmail: function(email) {
         if (!email) return false;
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -555,19 +555,118 @@ const DesaMediaUtils = {
         }
     },
 
-    // PERBAIKAN: Helper untuk mendapatkan initial user name
+    // ================================
+    // CLOUDINARY UPLOAD FUNCTIONS
+    // ================================
+
+    // Upload gambar utama ke Cloudinary
+    uploadMainImage: async function(file) {
+        return await this.uploadToCloudinary(file, 'article-images');
+    },
+
+    // Upload gambar konten ke Cloudinary
+    uploadContentImage: async function(file, altText = 'Gambar artikel') {
+        const result = await this.uploadToCloudinary(file, 'content-images');
+        if (result.success) {
+            result.alt = altText;
+        }
+        return result;
+    },
+
+    // Fungsi utama upload ke Cloudinary
+    uploadToCloudinary: function(file, folder = 'desamedia') {
+        return new Promise((resolve) => {
+            console.log('Uploading to Cloudinary...', file.name);
+            
+            // Validasi file
+            if (!this.validateImageFile(file)) {
+                resolve({
+                    success: false,
+                    error: 'File gambar tidak valid'
+                });
+                return;
+            }
+
+            // Cek Cloudinary config
+            if (!window.CLOUDINARY_CONFIG || !window.CLOUDINARY_CONFIG.cloud_name) {
+                resolve({
+                    success: false,
+                    error: 'Cloudinary belum dikonfigurasi. Pastikan cloudinary-config.js dimuat.'
+                });
+                return;
+            }
+
+            // Siapkan form data
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', window.CLOUDINARY_CONFIG.upload_preset);
+            formData.append('folder', folder);
+            
+            // Tambahkan tags untuk organisasi
+            formData.append('tags', 'desamedia,article');
+
+            // Lakukan upload
+            fetch(`https://api.cloudinary.com/v1_1/${window.CLOUDINARY_CONFIG.cloud_name}/image/upload`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.secure_url) {
+                    console.log('✅ Cloudinary upload success:', data.secure_url);
+                    resolve({
+                        success: true,
+                        url: data.secure_url,
+                        filename: file.name,
+                        size: file.size,
+                        type: file.type,
+                        public_id: data.public_id,
+                        format: data.format,
+                        width: data.width,
+                        height: data.height,
+                        cloudinary_data: data
+                    });
+                } else {
+                    console.error('❌ Cloudinary upload failed:', data);
+                    resolve({
+                        success: false,
+                        error: data.error?.message || 'Upload gagal',
+                        cloudinary_error: data
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('❌ Cloudinary upload error:', error);
+                resolve({
+                    success: false,
+                    error: 'Error mengupload gambar: ' + error.message
+                });
+            });
+        });
+    },
+
+    // ================================
+    // ENHANCED UTILITY FUNCTIONS
+    // ================================
+
+    // Helper untuk mendapatkan initial user name
     getUserInitial: function(name) {
         if (!name) return 'U';
         return name.charAt(0).toUpperCase();
     },
 
-    // PERBAIKAN: Helper untuk format nama penulis
+    // Helper untuk format nama penulis
     formatAuthorName: function(name) {
         if (!name) return 'Penulis';
         return name.trim();
     },
 
-    // PERBAIKAN: Helper untuk memeriksa apakah user sudah login
+    // Helper untuk memeriksa apakah user sudah login
     isUserLoggedIn: function() {
         try {
             const userData = localStorage.getItem('currentUser');
@@ -578,7 +677,7 @@ const DesaMediaUtils = {
         }
     },
 
-    // PERBAIKAN: Helper untuk mendapatkan data user
+    // Helper untuk mendapatkan data user
     getCurrentUser: function() {
         try {
             const userData = localStorage.getItem('currentUser');
@@ -589,7 +688,7 @@ const DesaMediaUtils = {
         }
     },
 
-    // PERBAIKAN: Helper untuk logout
+    // Helper untuk logout
     logout: function() {
         try {
             localStorage.removeItem('currentUser');
@@ -604,27 +703,27 @@ const DesaMediaUtils = {
         }
     },
 
-    // PERBAIKAN: Helper untuk menampilkan error
+    // Helper untuk menampilkan error
     showError: function(message) {
         this.showNotification(message, 'error');
     },
 
-    // PERBAIKAN: Helper untuk menampilkan success
+    // Helper untuk menampilkan success
     showSuccess: function(message) {
         this.showNotification(message, 'success');
     },
 
-    // PERBAIKAN: Helper untuk menampilkan warning
+    // Helper untuk menampilkan warning
     showWarning: function(message) {
         this.showNotification(message, 'warning');
     },
 
-    // PERBAIKAN: Helper untuk menampilkan info
+    // Helper untuk menampilkan info
     showInfo: function(message) {
         this.showNotification(message, 'info');
     },
 
-    // PERBAIKAN: Helper untuk menampilkan loading
+    // Helper untuk menampilkan loading
     showLoading: function(message = 'Memuat...') {
         const loadingOverlay = document.getElementById('loadingOverlay');
         const loadingText = document.getElementById('loadingText');
@@ -638,7 +737,7 @@ const DesaMediaUtils = {
         }
     },
 
-    // PERBAIKAN: Helper untuk menyembunyikan loading
+    // Helper untuk menyembunyikan loading
     hideLoading: function() {
         const loadingOverlay = document.getElementById('loadingOverlay');
         if (loadingOverlay) {
@@ -646,7 +745,7 @@ const DesaMediaUtils = {
         }
     },
 
-    // PERBAIKAN: Helper untuk validasi file gambar
+    // Helper untuk validasi file gambar
     validateImageFile: function(file) {
         // Check file type
         if (!file.type.match('image.*')) {
@@ -663,7 +762,7 @@ const DesaMediaUtils = {
         return true;
     },
 
-    // PERBAIKAN: Helper untuk mendapatkan gambar default berdasarkan kategori
+    // Helper untuk mendapatkan gambar default berdasarkan kategori
     getDefaultImageByCategory: function(category) {
         const defaultImages = {
             'Pemerintahan': 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
@@ -680,7 +779,7 @@ const DesaMediaUtils = {
         return defaultImages[category] || defaultImages['Pemerintahan'];
     },
 
-    // PERBAIKAN: Helper untuk setup navigation
+    // Helper untuk setup navigation
     setupNavigation: function() {
         const navItems = document.querySelectorAll('.nav-item');
         const sections = document.querySelectorAll('[id$="-section"]');
@@ -709,7 +808,7 @@ const DesaMediaUtils = {
         });
     },
 
-    // PERBAIKAN: Helper untuk update page title
+    // Helper untuk update page title
     updatePageTitle: function(sectionName) {
         const titles = {
             'dashboard': 'Dashboard Penulis',
@@ -724,7 +823,7 @@ const DesaMediaUtils = {
         }
     },
 
-    // PERBAIKAN: Helper untuk setup form handlers
+    // Helper untuk setup form handlers
     setupFormHandlers: function() {
         // Article form
         const articleForm = document.getElementById('articleForm');
@@ -749,104 +848,7 @@ const DesaMediaUtils = {
         }
     },
 
-    // PERBAIKAN: Helper untuk upload gambar utama
-    uploadMainImage: async function(file) {
-        try {
-            console.log('Uploading main image to Firebase...');
-            
-            if (typeof firebase === 'undefined' || !firebase.storage) {
-                throw new Error('Firebase Storage tidak tersedia');
-            }
-            
-            // Validate file first
-            if (!this.validateImageFile(file)) {
-                throw new Error('File tidak valid');
-            }
-            
-            // Upload to Firebase Storage
-            const storageRef = firebase.storage().ref();
-            const imageRef = storageRef.child(`article-images/${Date.now()}-${file.name}`);
-            const snapshot = await imageRef.put(file);
-            const downloadURL = await snapshot.ref.getDownloadURL();
-            
-            console.log('Main image uploaded successfully:', downloadURL);
-            return {
-                success: true,
-                url: downloadURL,
-                filename: file.name,
-                size: file.size,
-                type: file.type
-            };
-            
-        } catch (error) {
-            console.error('Error uploading main image:', error);
-            
-            let errorMessage = 'Error mengupload gambar utama: ' + error.message;
-            if (error.message.includes('storage/unauthorized')) {
-                errorMessage = 'Tidak memiliki izin untuk mengupload gambar.';
-            } else if (error.message.includes('storage/retry-limit-exceeded')) {
-                errorMessage = 'Upload gagal setelah beberapa percobaan. Periksa koneksi internet Anda.';
-            }
-            
-            return {
-                success: false,
-                error: errorMessage,
-                originalError: error
-            };
-        }
-    },
-
-    // PERBAIKAN: Helper untuk upload gambar konten
-    uploadContentImage: async function(file, altText = 'Gambar artikel') {
-        try {
-            console.log('Uploading content image to Firebase...');
-            
-            if (typeof firebase === 'undefined' || !firebase.storage) {
-                throw new Error('Firebase Storage tidak tersedia');
-            }
-            
-            // Validate file first
-            if (!this.validateImageFile(file)) {
-                throw new Error('File tidak valid');
-            }
-            
-            // Upload to Firebase Storage
-            const storageRef = firebase.storage().ref();
-            const imageRef = storageRef.child(`content-images/${Date.now()}-${file.name}`);
-            const snapshot = await imageRef.put(file);
-            const downloadURL = await snapshot.ref.getDownloadURL();
-            
-            console.log('Content image uploaded successfully:', downloadURL);
-            return { 
-                success: true,
-                url: downloadURL, 
-                alt: altText,
-                filename: file.name,
-                size: file.size,
-                type: file.type
-            };
-            
-        } catch (error) {
-            console.error('Error uploading content image:', error);
-            
-            let errorMessage = 'Error mengupload gambar: ' + error.message;
-            if (error.message.includes('storage/unauthorized')) {
-                errorMessage = 'Tidak memiliki izin untuk mengupload gambar.';
-            } else if (error.message.includes('storage/retry-limit-exceeded')) {
-                errorMessage = 'Upload gagal setelah beberapa percobaan. Periksa koneksi internet Anda.';
-            } else if (error.message.includes('storage/canceled')) {
-                errorMessage = 'Upload dibatalkan.';
-            }
-            
-            return {
-                success: false,
-                error: errorMessage,
-                originalError: error
-            };
-        }
-    },
-
-    // PERBAIKAN: Helper untuk membersihkan preview gambar
+    // Helper untuk membersihkan preview gambar
     clearImagePreview: function() {
         const preview = document.getElementById('imagePreview');
         const uploadArea = document.getElementById('uploadArea');
@@ -857,7 +859,7 @@ const DesaMediaUtils = {
         if (fileInput) fileInput.value = '';
     },
 
-    // PERBAIKAN: Helper untuk menambah tag
+    // Helper untuk menambah tag
     addTag: function(tag) {
         console.log('Adding tag:', tag);
         const tagsInput = document.getElementById('articleTags');
@@ -882,7 +884,7 @@ const DesaMediaUtils = {
         tagsInput.focus();
     },
 
-    // PERBAIKAN: Helper untuk reset form artikel
+    // Helper untuk reset form artikel
     resetArticleForm: function() {
         const articleForm = document.getElementById('articleForm');
         if (articleForm) {
@@ -905,7 +907,7 @@ const DesaMediaUtils = {
         this.showNotification('Form berhasil direset', 'info');
     },
 
-    // PERBAIKAN: Helper untuk memuat data profil
+    // Helper untuk memuat data profil
     loadProfileData: async function() {
         try {
             const currentUser = this.getCurrentUser();
@@ -957,7 +959,7 @@ const DesaMediaUtils = {
         }
     },
 
-    // PERBAIKAN: Helper untuk menyimpan profil
+    // Helper untuk menyimpan profil
     saveProfile: async function() {
         try {
             this.showLoading('Menyimpan profil...');
@@ -1012,6 +1014,140 @@ const DesaMediaUtils = {
             this.showError(`Gagal menyimpan profil: ${error.message}`);
             this.hideLoading();
         }
+    },
+
+    // ================================
+    // CLOUDINARY IMAGE OPTIMIZATION
+    // ================================
+
+    // Optimize Cloudinary URL untuk performa
+    optimizeImageUrl: function(url, options = {}) {
+        if (!url || !url.includes('cloudinary.com')) return url;
+        
+        const defaultOptions = {
+            width: options.width || 'auto',
+            quality: options.quality || 'auto',
+            format: options.format || 'auto'
+        };
+        
+        // Jika URL sudah mengandung transformasi, tambahkan parameter baru
+        if (url.includes('/upload/')) {
+            const parts = url.split('/upload/');
+            const transformations = [];
+            
+            if (defaultOptions.width !== 'auto') {
+                transformations.push(`w_${defaultOptions.width}`);
+            }
+            if (defaultOptions.quality !== 'auto') {
+                transformations.push(`q_${defaultOptions.quality}`);
+            }
+            if (defaultOptions.format !== 'auto') {
+                transformations.push(`f_${defaultOptions.format}`);
+            }
+            
+            if (transformations.length > 0) {
+                return `${parts[0]}/upload/${transformations.join(',')}/${parts[1]}`;
+            }
+        }
+        
+        return url;
+    },
+
+    // Generate responsive image URLs untuk different screen sizes
+    generateResponsiveImageUrls: function(publicId, options = {}) {
+        if (!publicId) return null;
+        
+        const baseUrl = `https://res.cloudinary.com/${window.CLOUDINARY_CONFIG.cloud_name}/image/upload`;
+        const transformations = [];
+        
+        // Default transformations
+        if (options.quality) transformations.push(`q_${options.quality}`);
+        if (options.format) transformations.push(`f_${options.format}`);
+        
+        const baseTransform = transformations.length > 0 ? `${transformations.join(',')}/` : '';
+        
+        return {
+            original: `${baseUrl}/${baseTransform}${publicId}`,
+            large: `${baseUrl}/${baseTransform}w_1200/${publicId}`,
+            medium: `${baseUrl}/${baseTransform}w_800/${publicId}`,
+            small: `${baseUrl}/${baseTransform}w_400/${publicId}`,
+            thumbnail: `${baseUrl}/${baseTransform}w_200,h_200,c_fill/${publicId}`
+        };
+    },
+
+    // ================================
+    // ERROR HANDLING & FALLBACKS
+    // ================================
+
+    // Handle upload errors dengan fallback
+    handleUploadError: function(error, file) {
+        console.error('Upload error:', error);
+        
+        // Fallback ke base64 jika upload gagal
+        if (error.includes('CORS') || error.includes('network') || error.includes('Failed to fetch')) {
+            console.log('Using base64 fallback for image');
+            return this.uploadImageFallback(file);
+        }
+        
+        return {
+            success: false,
+            error: error
+        };
+    },
+
+    // Fallback upload menggunakan base64
+    uploadImageFallback: function(file) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                resolve({
+                    success: true,
+                    url: e.target.result, // base64 data URL
+                    filename: file.name,
+                    size: file.size,
+                    type: file.type,
+                    isBase64: true // flag untuk menandai base64
+                });
+            };
+            reader.onerror = function() {
+                resolve({
+                    success: false,
+                    error: 'Gagal membaca file'
+                });
+            };
+            reader.readAsDataURL(file);
+        });
+    },
+
+    // Check Cloudinary configuration
+    checkCloudinaryConfig: function() {
+        if (!window.CLOUDINARY_CONFIG) {
+            console.error('Cloudinary config not found');
+            return false;
+        }
+        
+        if (!window.CLOUDINARY_CONFIG.cloud_name || window.CLOUDINARY_CONFIG.cloud_name === 'your-cloud-name') {
+            console.error('Cloudinary cloud_name not configured');
+            return false;
+        }
+        
+        if (!window.CLOUDINARY_CONFIG.upload_preset) {
+            console.error('Cloudinary upload_preset not configured');
+            return false;
+        }
+        
+        return true;
+    },
+
+    // Initialize Cloudinary
+    initializeCloudinary: function() {
+        if (this.checkCloudinaryConfig()) {
+            console.log('✅ Cloudinary configured successfully');
+            return true;
+        } else {
+            console.warn('⚠️ Cloudinary not properly configured');
+            return false;
+        }
     }
 };
 
@@ -1034,5 +1170,11 @@ window.clearImagePreview = DesaMediaUtils.clearImagePreview;
 window.addTag = DesaMediaUtils.addTag;
 window.loadProfileData = DesaMediaUtils.loadProfileData;
 window.saveProfile = DesaMediaUtils.saveProfile;
+window.logout = DesaMediaUtils.logout;
 
-console.log('Utils.js berhasil dimuat');
+// Initialize Cloudinary saat utils.js dimuat
+document.addEventListener('DOMContentLoaded', function() {
+    DesaMediaUtils.initializeCloudinary();
+});
+
+console.log('Utils.js berhasil dimuat dengan Cloudinary integration');

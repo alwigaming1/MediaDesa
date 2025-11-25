@@ -919,6 +919,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
     <script src="js/firebase-config.js"></script>
+    <script src="js/cloudinary-config.js"></script> <!-- BARU: Cloudinary Config -->
     <script src="js/utils.js"></script>
     <script src="js/dashboard.js"></script>
     
@@ -1163,12 +1164,12 @@
             });
         }
 
-        // Insert image - PERBAIKAN UTAMA
+        // Insert image - PERBAIKAN UTAMA: Cloudinary
         if (insertImageBtn) {
             insertImageBtn.addEventListener('click', showInsertImageModal);
         }
 
-        // Setup untuk upload gambar dalam konten - PERBAIKAN UTAMA
+        // Setup untuk upload gambar dalam konten - PERBAIKAN UTAMA: Cloudinary
         const contentUploadArea = document.getElementById('contentImageUploadArea');
         const contentFileInput = document.getElementById('contentImageFile');
         
@@ -1257,7 +1258,7 @@
             return true;
         }
 
-        // Insert image into editor - PERBAIKAN UTAMA
+        // Insert image into editor - PERBAIKAN UTAMA: Cloudinary
         if (insertImageConfirmBtn) {
             insertImageConfirmBtn.addEventListener('click', async function() {
                 const file = contentFileInput.files[0];
@@ -1271,60 +1272,52 @@
             });
         }
 
-        // Upload and insert content image - FUNGSI BARU YANG DIPERBAIKI
-        // PERBAIKAN: Upload and insert content image - Menggunakan DesaMediaUtils
-async function uploadAndInsertContentImage(file, altText = 'Gambar artikel') {
-    try {
-        console.log('Uploading content image...');
-        
-        // Show loading state
-        const insertBtn = document.getElementById('insertImageConfirmBtn');
-        if (insertBtn) {
-            insertBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengupload...';
-            insertBtn.disabled = true;
+        // PERBAIKAN: Upload and insert content image - Menggunakan Cloudinary
+        async function uploadAndInsertContentImage(file, altText = 'Gambar artikel') {
+            try {
+                console.log('Uploading content image to Cloudinary...');
+                
+                // Show loading state
+                const insertBtn = document.getElementById('insertImageConfirmBtn');
+                if (insertBtn) {
+                    insertBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengupload...';
+                    insertBtn.disabled = true;
+                }
+
+                // PERBAIKAN: Gunakan Cloudinary untuk upload
+                const uploadResult = await DesaMediaUtils.uploadContentImage(file, altText);
+                
+                if (!uploadResult.success) {
+                    throw new Error(uploadResult.error);
+                }
+
+                console.log('Image uploaded successfully to Cloudinary:', uploadResult.url);
+
+                // Insert image into editor
+                // Gunakan URL dari Cloudinary, bisa juga dioptimasi dengan transformasi
+                const imgHTML = `<img src="${uploadResult.url}" alt="${altText}" style="max-width: 100%; height: auto; border-radius: 6px; margin: 1rem 0;">`;
+                executeCommand('insertHTML', imgHTML);
+
+                // Close modal and reset
+                closeInsertImageModal();
+
+                // Show success message
+                showNotification('Gambar berhasil disisipkan!', 'success');
+
+            } catch (error) {
+                console.error('Error uploading content image:', error);
+                
+                let errorMessage = 'Error mengupload gambar: ' + error.message;
+                showError(errorMessage);
+                
+                // Reset button state
+                const insertBtn = document.getElementById('insertImageConfirmBtn');
+                if (insertBtn) {
+                    insertBtn.innerHTML = 'Sisipkan Gambar';
+                    insertBtn.disabled = false;
+                }
+            }
         }
-
-        // PERBAIKAN: Gunakan DesaMediaUtils untuk upload gambar
-        const uploadResult = await DesaMediaUtils.uploadContentImage(file, altText);
-        
-        if (!uploadResult.success) {
-            throw new Error(uploadResult.error);
-        }
-
-        console.log('Image uploaded successfully:', uploadResult.url);
-
-        // Insert image into editor
-        const imgHTML = `<img src="${uploadResult.url}" alt="${altText}" style="max-width: 100%; height: auto; border-radius: 6px; margin: 1rem 0;">`;
-        executeCommand('insertHTML', imgHTML);
-
-        // Close modal and reset
-        closeInsertImageModal();
-
-        // Show success message
-        showNotification('Gambar berhasil disisipkan!', 'success');
-
-    } catch (error) {
-        console.error('Error uploading content image:', error);
-        
-        let errorMessage = 'Error mengupload gambar: ';
-        if (error.message.includes('storage/unauthorized')) {
-            errorMessage += 'Tidak memiliki izin untuk mengupload gambar.';
-        } else if (error.message.includes('storage/retry-limit-exceeded')) {
-            errorMessage += 'Upload gagal setelah beberapa percobaan. Periksa koneksi internet Anda.';
-        } else {
-            errorMessage += error.message;
-        }
-        
-        showError(errorMessage);
-        
-        // Reset button state
-        const insertBtn = document.getElementById('insertImageConfirmBtn');
-        if (insertBtn) {
-            insertBtn.innerHTML = 'Sisipkan Gambar';
-            insertBtn.disabled = false;
-        }
-    }
-}
 
         // Checklist functionality
         if (checklistBtn) {
@@ -1415,7 +1408,7 @@ async function uploadAndInsertContentImage(file, altText = 'Gambar artikel') {
     function setupUploadAreas() {
         console.log('Setting up upload areas...');
         
-        // Setup untuk upload gambar utama - PERBAIKAN
+        // Setup untuk upload gambar utama - PERBAIKAN: Cloudinary
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('articleImageFile');
         
@@ -1663,6 +1656,44 @@ async function uploadAndInsertContentImage(file, altText = 'Gambar artikel') {
         hideLoading();
     }, 10000);
 
+    // Global error handler untuk Firebase
+    window.addEventListener('error', function(e) {
+        if (e.error && e.error.message && e.error.message.includes('firebase')) {
+            console.error('Global Firebase Error:', e.error);
+            showError('Terjadi error pada Firebase. Silakan refresh halaman.');
+        }
+    });
+
+    // Check Firebase availability
+    function checkFirebaseDependencies() {
+        const dependencies = {
+            'firebase': typeof firebase,
+            'firebase.auth': typeof auth,
+            'firebase.firestore': typeof db,
+            'firebase.storage': typeof storage
+        };
+        
+        console.log('Firebase Dependencies Check:', dependencies);
+        
+        for (const [dep, status] of Object.entries(dependencies)) {
+            if (status === 'undefined') {
+                console.error(`Missing dependency: ${dep}`);
+                return false;
+            }
+        }
+        
+        return true;
+    }
+
+    // Initialize check saat page load
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(() => {
+            if (!checkFirebaseDependencies()) {
+                showError('Beberapa komponen Firebase tidak terload. Silakan refresh halaman.');
+            }
+        }, 2000);
+    });
+
     // Make functions globally available
     window.addTag = addTag;
     window.showInsertLinkModal = showInsertLinkModal;
@@ -1674,43 +1705,5 @@ async function uploadAndInsertContentImage(file, altText = 'Gambar artikel') {
     window.saveProfile = saveProfile;
     window.showNewArticleSection = showNewArticleSection;
     </script>
-    // Global error handler untuk Firebase
-window.addEventListener('error', function(e) {
-    if (e.error && e.error.message && e.error.message.includes('firebase')) {
-        console.error('Global Firebase Error:', e.error);
-        showError('Terjadi error pada Firebase. Silakan refresh halaman.');
-    }
-});
-
-// Check Firebase availability
-function checkFirebaseDependencies() {
-    const dependencies = {
-        'firebase': typeof firebase,
-        'firebase.auth': typeof auth,
-        'firebase.firestore': typeof db,
-        'firebase.storage': typeof storage
-    };
-    
-    console.log('Firebase Dependencies Check:', dependencies);
-    
-    for (const [dep, status] of Object.entries(dependencies)) {
-        if (status === 'undefined') {
-            console.error(`Missing dependency: ${dep}`);
-            return false;
-        }
-    }
-    
-    return true;
-}
-
-// Initialize check saat page load
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(() => {
-        if (!checkFirebaseDependencies()) {
-            showError('Beberapa komponen Firebase tidak terload. Silakan refresh halaman.');
-        }
-    }, 2000);
-});
 </body>
-
 </html>

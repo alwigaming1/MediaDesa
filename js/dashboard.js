@@ -1,4 +1,4 @@
-// js/dashboard-fixed.js - Enhanced dashboard functionality dengan Firebase
+// js/dashboard.js - Enhanced dashboard functionality dengan Cloudinary
 console.log('Memuat dashboard.js...');
 
 // Variabel global
@@ -66,7 +66,7 @@ function editArticle(articleId) {
     }
 }
 
-// PERBAIKAN: Update fungsi saveArticle untuk menggunakan DesaMediaUtils
+// PERBAIKAN: Update fungsi saveArticle untuk menggunakan Cloudinary
 async function saveArticle(e) {
     if (e) e.preventDefault();
     
@@ -76,7 +76,7 @@ async function saveArticle(e) {
         const title = document.getElementById('articleTitle').value;
         const category = document.getElementById('articleCategory').value;
         const status = document.getElementById('articleStatus').value;
-        const content = getEditorContent(); // Mengambil konten dari editor WYSIWYG
+        const content = getEditorContent();
         const tags = document.getElementById('articleTags').value;
         
         // Validasi form
@@ -84,11 +84,11 @@ async function saveArticle(e) {
             throw new Error('Judul, kategori, dan konten artikel wajib diisi');
         }
         
-        // Dapatkan gambar yang diupload
+        // PERBAIKAN: Upload gambar dengan Cloudinary
         let image = null;
         const fileInput = document.getElementById('articleImageFile');
+        
         if (fileInput && fileInput.files.length > 0) {
-            // PERBAIKAN: Upload gambar utama menggunakan DesaMediaUtils
             const file = fileInput.files[0];
             
             // Validasi file
@@ -96,10 +96,12 @@ async function saveArticle(e) {
                 throw new Error('File gambar tidak valid');
             }
             
+            // UPLOAD KE CLOUDINARY
             const uploadResult = await DesaMediaUtils.uploadMainImage(file);
+            
             if (uploadResult.success) {
                 image = uploadResult.url;
-                console.log('Gambar utama berhasil diupload:', image);
+                console.log('✅ Gambar utama berhasil diupload ke Cloudinary:', image);
             } else {
                 throw new Error(uploadResult.error || 'Gagal mengupload gambar utama');
             }
@@ -161,7 +163,7 @@ async function saveArticle(e) {
 function resetForm() {
     document.getElementById('articleForm').reset();
     clearImagePreview();
-    setEditorContent(''); // Reset konten editor
+    setEditorContent('');
     localStorage.removeItem('editingArticleId');
     document.getElementById('pageTitle').textContent = 'Tulis Artikel Baru';
     showNotification('Form berhasil direset', 'info');
@@ -448,6 +450,42 @@ function showNotification(message, type = 'info') {
     }
 }
 
+// Fungsi untuk membersihkan preview gambar
+function clearImagePreview() {
+    const preview = document.getElementById('imagePreview');
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('articleImageFile');
+    
+    if (preview) preview.style.display = 'none';
+    if (uploadArea) uploadArea.style.display = 'block';
+    if (fileInput) fileInput.value = '';
+}
+
+// Fungsi untuk menambah tag
+function addTag(tag) {
+    console.log('Adding tag:', tag);
+    const tagsInput = document.getElementById('articleTags');
+    if (!tagsInput) {
+        console.error('Tags input not found!');
+        return;
+    }
+    
+    const currentTags = tagsInput.value.split(',').map(t => t.trim()).filter(t => t);
+    
+    if (!currentTags.includes(tag)) {
+        if (currentTags.length > 0) {
+            tagsInput.value = currentTags.join(', ') + ', ' + tag;
+        } else {
+            tagsInput.value = tag;
+        }
+        console.log('Tag added, current tags:', tagsInput.value);
+    } else {
+        console.log('Tag already exists, skipping...');
+    }
+    
+    tagsInput.focus();
+}
+
 // Fungsi logout
 async function logout() {
     try {
@@ -459,6 +497,7 @@ async function logout() {
             }
             
             localStorage.removeItem('currentUser');
+            localStorage.removeItem('editingArticleId');
             window.location.href = 'login.html';
         }
     } catch (error) {
@@ -628,6 +667,7 @@ window.logout = logout;
 window.loadDashboardData = loadDashboardData;
 window.hideError = hideError;
 window.showDashboardSection = showDashboardSection;
+window.clearImagePreview = clearImagePreview;
 
 // Utility functions untuk kompatibilitas
 window.showError = showError;

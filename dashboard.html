@@ -1674,5 +1674,43 @@ async function uploadAndInsertContentImage(file, altText = 'Gambar artikel') {
     window.saveProfile = saveProfile;
     window.showNewArticleSection = showNewArticleSection;
     </script>
+    // Global error handler untuk Firebase
+window.addEventListener('error', function(e) {
+    if (e.error && e.error.message && e.error.message.includes('firebase')) {
+        console.error('Global Firebase Error:', e.error);
+        showError('Terjadi error pada Firebase. Silakan refresh halaman.');
+    }
+});
+
+// Check Firebase availability
+function checkFirebaseDependencies() {
+    const dependencies = {
+        'firebase': typeof firebase,
+        'firebase.auth': typeof auth,
+        'firebase.firestore': typeof db,
+        'firebase.storage': typeof storage
+    };
+    
+    console.log('Firebase Dependencies Check:', dependencies);
+    
+    for (const [dep, status] of Object.entries(dependencies)) {
+        if (status === 'undefined') {
+            console.error(`Missing dependency: ${dep}`);
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+// Initialize check saat page load
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        if (!checkFirebaseDependencies()) {
+            showError('Beberapa komponen Firebase tidak terload. Silakan refresh halaman.');
+        }
+    }, 2000);
+});
 </body>
+
 </html>
